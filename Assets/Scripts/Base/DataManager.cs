@@ -23,7 +23,6 @@ public class DataManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         getCharacterData();
@@ -34,7 +33,7 @@ public class DataManager : MonoBehaviour
         TextAsset characterJson = Resources.Load<TextAsset>("Data/CharacterData");
         string jsonString = characterJson.ToString();
 
-        // JSON ตฅภฬลอ Deserialize
+        // JSON Data Deserialize
         CharacterData data = JsonUtility.FromJson<CharacterData>(jsonString);
         Dictionary<string, string> sampleDic = new Dictionary<string, string>();
 
