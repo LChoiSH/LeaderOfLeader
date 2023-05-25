@@ -22,6 +22,8 @@ public class SelectCharacter : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (DataManager.instance.isLoading) return;
+
         DataManager.instance.currentCharacter = characterName;
 
         OnSelected();

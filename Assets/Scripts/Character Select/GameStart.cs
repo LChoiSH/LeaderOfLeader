@@ -36,6 +36,8 @@ public class GameStart : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
+        DataManager.instance.isLoading= true;
+        startButton.interactable = false;
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
 
         while (!asyncOperation.isDone)
@@ -47,5 +49,8 @@ public class GameStart : MonoBehaviour
 
             yield return null; // wait 1 frame
         }
+
+        startButton.interactable = true;
+        DataManager.instance.isLoading = false;
     }
 }

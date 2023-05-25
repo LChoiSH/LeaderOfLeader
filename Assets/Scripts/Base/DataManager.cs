@@ -9,6 +9,7 @@ public class DataManager : MonoBehaviour
     public static DataManager instance;
     public string currentCharacter;
     public Dictionary<string, CharacterInfo> characterDictionary = new Dictionary<string, CharacterInfo>();
+    public bool isLoading = false;
 
     private void Awake()
     {
@@ -30,6 +31,8 @@ public class DataManager : MonoBehaviour
 
     void getCharacterData()
     {
+        isLoading= true;
+
         TextAsset characterJson = Resources.Load<TextAsset>("Data/CharacterData");
         string jsonString = characterJson.ToString();
 
@@ -41,5 +44,7 @@ public class DataManager : MonoBehaviour
         {
             characterDictionary.Add(characterInfo.name, characterInfo);
         }
+
+        isLoading= false;
     }
 }

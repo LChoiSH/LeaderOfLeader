@@ -1,10 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class Member : MonoBehaviour
@@ -16,7 +11,7 @@ public class Member : MonoBehaviour
     protected CharacterInfo myCharacterInfo;
 
     public GameController gameController;
-    protected GameObject followingTarget;
+    public GameObject followingTarget;
 
     // speed
     protected float speed = 10.0f;
