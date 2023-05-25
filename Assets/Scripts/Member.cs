@@ -16,7 +16,7 @@ public class Member : MonoBehaviour
     protected CharacterInfo myCharacterInfo;
 
     public GameController gameController;
-    public GameObject followingTarget;
+    protected GameObject followingTarget;
 
     // speed
     protected float speed = 10.0f;
@@ -41,14 +41,12 @@ public class Member : MonoBehaviour
         isLoading = true;
     }
 
-    // Start is called before the first frame update
     protected virtual void Start()
     {
         gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
         transform.position = new Vector3(0, -20, 0);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isLoading) return;
@@ -128,13 +126,6 @@ public class Member : MonoBehaviour
 
     private void SetActiveFalse()
     {
-        gameObject.SetActive(false);
-    }
-
-    IEnumerator RemovePrefab()
-    {
-        yield return new WaitForSeconds(5);
-        Destroy(myPrefab.gameObject);
         gameObject.SetActive(false);
     }
 

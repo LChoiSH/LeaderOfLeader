@@ -23,7 +23,6 @@ public class Leader : Member
 
     public Vector3  startingPoint = Vector3.zero;
 
-    // Start is called before the first frame update
     override protected void Start()
     {
         base.Start();
@@ -44,7 +43,6 @@ public class Leader : Member
         skillTimeText = skillTimeTextWrap.GetComponentInChildren<TMP_Text>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         MovePlayer();

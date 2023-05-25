@@ -45,7 +45,7 @@ public class GameStart : MonoBehaviour
 
             loadingProgressText.text = "Now Loading: " + (progress * 100).ToString() + "%";
 
-            yield return null; // 한 프레임 대기
+            yield return null; // wait 1 frame
         }
     }
 }

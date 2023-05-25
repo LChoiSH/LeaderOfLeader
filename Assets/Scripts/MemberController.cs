@@ -16,12 +16,6 @@ public class MemberController : MonoBehaviour
         player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public Member addMember()
     {
         for(int i = 0; i < members.Length;i++)
