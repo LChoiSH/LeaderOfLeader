@@ -2418,11 +2418,8 @@ MonoBehaviour:
   isLoading: 1
   gameController: {fileID: 0}
   followingTarget: {fileID: 1943095767}
-  speed: 10
   attackSpeed: 1
   missile: {fileID: 4837954891272329683, guid: 138a7a4e88a850b49b2664b1fa6a0b69, type: 3}
-  MaxHp: 10
-  currentHp: 0
   healthBar: {fileID: 0}
 --- !u!4 &280263221
 Transform:
@@ -6339,7 +6336,8 @@ GameObject:
   - component: {fileID: 901322607}
   - component: {fileID: 901322606}
   - component: {fileID: 901322605}
-  - component: {fileID: 901322609}
+  - component: {fileID: 901322610}
+  - component: {fileID: 901322611}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -6356,7 +6354,7 @@ MeshCollider:
   m_GameObject: {fileID: 901322604}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -6426,7 +6424,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &901322609
+--- !u!54 &901322610
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901322604}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!65 &901322611
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6518,11 +6532,8 @@ MonoBehaviour:
   isLoading: 1
   gameController: {fileID: 0}
   followingTarget: {fileID: 280263217}
-  speed: 10
   attackSpeed: 1
   missile: {fileID: 4837954891272329683, guid: 138a7a4e88a850b49b2664b1fa6a0b69, type: 3}
-  MaxHp: 10
-  currentHp: 0
   healthBar: {fileID: 0}
 --- !u!1 &916622125 stripped
 GameObject:
@@ -7449,10 +7460,9 @@ MonoBehaviour:
   gameOverScreen: {fileID: 1704900535}
   isGameActive: 1
   levelText: {fileID: 1750272181}
-  spawnTime: 2
+  spawnTime: 3
   spawnExceptRange: 10
   spawnPrefabs:
-  - {fileID: 199953719373920465, guid: 88c34f97a09d6b1429ef2b7514d96cc2, type: 3}
   - {fileID: 5047459283179747890, guid: b104ca34e9a5d9e47a5e5ffd909c6f46, type: 3}
   - {fileID: 7033863315363831247, guid: e76f5be8c7d7b1d4b8a7573c69603b13, type: 3}
   scoreText: {fileID: 15105186}
@@ -7869,8 +7879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9c24c533d2f1f4b982ce29ad2de39d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charPrefabs: []
-  player: {fileID: 0}
 --- !u!4 &1181957348
 Transform:
   m_ObjectHideFlags: 0
@@ -10436,11 +10444,8 @@ MonoBehaviour:
   isLoading: 1
   gameController: {fileID: 0}
   followingTarget: {fileID: 907197709}
-  speed: 10
   attackSpeed: 1
   missile: {fileID: 4837954891272329683, guid: 138a7a4e88a850b49b2664b1fa6a0b69, type: 3}
-  MaxHp: 10
-  currentHp: 0
   healthBar: {fileID: 0}
 --- !u!1001 &1518989777
 PrefabInstance:
@@ -12345,11 +12350,8 @@ MonoBehaviour:
   isLoading: 1
   gameController: {fileID: 0}
   followingTarget: {fileID: 1104298935}
-  speed: 10
   attackSpeed: 1
   missile: {fileID: 4837954891272329683, guid: 138a7a4e88a850b49b2664b1fa6a0b69, type: 3}
-  MaxHp: 100
-  currentHp: 0
   healthBar: {fileID: 0}
 --- !u!4 &1943095769
 Transform:
