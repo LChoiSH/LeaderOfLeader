@@ -1,6 +1,7 @@
 {
   "characterList": [
     {
+      "id": 0,
       "name": "Business Man",
       "prefab": "Business Man",
       "missilePrefab": "Sample Missile",
@@ -9,6 +10,7 @@
       "attackSpeed": 3
     },
     {
+      "id": 1,
       "name": "Farmer Man",
       "prefab": "Farmer Man",
       "missilePrefab": "Carrot Missile",
@@ -17,6 +19,7 @@
       "attackSpeed": 2
     },
     {
+      "id": 2,
       "name": "Mad Man",
       "prefab": "Mad Man",
       "missilePrefab": "Sample Missile",

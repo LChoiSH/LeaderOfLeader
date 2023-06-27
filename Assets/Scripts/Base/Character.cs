@@ -7,6 +7,7 @@ public class CharacterData
 [System.Serializable]
 public class CharacterInfo
 {
+    public int id;
     public string name;
     public string prefab;
     public string missilePrefab;

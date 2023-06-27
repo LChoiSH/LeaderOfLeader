@@ -1,14 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
-    public string currentCharacter;
-    public Dictionary<string, CharacterInfo> characterDictionary = new Dictionary<string, CharacterInfo>();
+    public int currentCharacterId;
+    public CharacterInfo[] characterList;
+    public Dictionary<int, CharacterInfo> characterDictionary = new Dictionary<int, CharacterInfo>();
     public bool isLoading = false;
 
     private void Awake()
@@ -26,25 +24,30 @@ public class DataManager : MonoBehaviour
 
     void Start()
     {
-        getCharacterData();
+        GetCharacterData();
     }
 
-    void getCharacterData()
+    void GetCharacterData()
     {
-        isLoading= true;
+        isLoading = true;
 
         TextAsset characterJson = Resources.Load<TextAsset>("Data/CharacterData");
         string jsonString = characterJson.ToString();
 
         // JSON Data Deserialize
         CharacterData data = JsonUtility.FromJson<CharacterData>(jsonString);
-        Dictionary<string, string> sampleDic = new Dictionary<string, string>();
+        characterList = data.characterList;
 
-        foreach (CharacterInfo characterInfo in data.characterList)
+        foreach (CharacterInfo characterInfo in characterList)
         {
-            characterDictionary.Add(characterInfo.name, characterInfo);
+            characterDictionary.Add(characterInfo.id, characterInfo);
         }
 
         isLoading= false;
+    }
+
+    public void SetCurrentCharacter(int x)
+    {
+        currentCharacterId = x;
     }
 }

@@ -1,7 +1,7 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 public enum EnemyState
@@ -13,7 +13,7 @@ public enum EnemyState
     Die
 }
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, Attackable
 {
     // Enemy FSM
     [SerializeField] private EnemyState currentState;
@@ -27,7 +27,8 @@ public class Enemy : MonoBehaviour
     BoxCollider selfCollder;
 
     // chase
-    [SerializeField] private float chaseDistance = 30.0f;
+    private float distance;
+    [SerializeField] private float chaseDistance = 40.0f;
 
     // attack
     [SerializeField] private float attackDistance = 5.0f;
@@ -59,7 +60,6 @@ public class Enemy : MonoBehaviour
         selfCollder = gameObject.GetComponent<BoxCollider>();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -89,7 +89,7 @@ public class Enemy : MonoBehaviour
 
     private void IdleStateUpdate()
     {
-        float distance = (target.transform.position - transform.position).magnitude;
+        distance = (target.transform.position - transform.position).magnitude;
 
         if (distance < attackDistance)
         {
@@ -130,6 +130,22 @@ public class Enemy : MonoBehaviour
     private void HitStateUpdate()
     {
 
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Damageable damageable = collision.gameObject.GetComponent<Damageable>();
+
+        if (damageable != null && (collision.gameObject.CompareTag("Member") && collision.gameObject.CompareTag("Player"))) {
+            damageable.Damaged(damage);
+        }
+    }
+
+    public int Attack()
+    {
+        
+
+        return 1;
     }
 
     public void Damaged(int damage)
