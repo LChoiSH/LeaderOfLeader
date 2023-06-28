@@ -50,11 +50,9 @@ public class Leader : Member
         skillImage = GameObject.Find("Skill Image").GetComponent<RawImage>();
 
         
-
         string skillImagePath = "Image/Skill/" + leaderCharacter.skillImage;
         Texture2D imageTexture = Resources.Load<Texture2D>(skillImagePath);
 
-        Debug.Log(skillImagePath);
         
         skillImage.texture = imageTexture;
 

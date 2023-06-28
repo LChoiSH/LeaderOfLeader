@@ -15,4 +15,5 @@ public class CharacterInfo
     public int hp;
     public string speed;
     public float attackSpeed;
+    public string info;
 }

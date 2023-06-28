@@ -11,6 +11,7 @@ public class CharacterWrap : MonoBehaviour
     public Button prevButton;
     public Button nextButton;
     public float characterDistance = 5.0f;
+    public InformationBox infoBox;
     Vector3 characterLoc = Vector3.zero;
 
     void Start()
@@ -27,6 +28,8 @@ public class CharacterWrap : MonoBehaviour
 
         prevButton.onClick.AddListener(prevCharacterSelect);
         nextButton.onClick.AddListener(nextChatacterSelect);
+
+        infoBox.OpenBox(DataManager.instance.characterDictionary[currentCharacter].info);
     }
 
     private void Update()
@@ -40,6 +43,7 @@ public class CharacterWrap : MonoBehaviour
         if (currentCharacter < 0) currentCharacter = characterList.Length - 1;
         DataManager.instance.SetCurrentCharacter(currentCharacter);
         characterLoc.x = -currentCharacter * 5;
+        infoBox.OpenBox(DataManager.instance.characterDictionary[currentCharacter].info);
     }
 
     public void nextChatacterSelect()
@@ -47,6 +51,7 @@ public class CharacterWrap : MonoBehaviour
         currentCharacter = (currentCharacter + 1) % characterList.Length;
         DataManager.instance.SetCurrentCharacter(currentCharacter);
         characterLoc.x = -currentCharacter * 5;
+        infoBox.OpenBox(DataManager.instance.characterDictionary[currentCharacter].info);
     }
 
 }
