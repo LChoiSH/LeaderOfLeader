@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 //using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +15,10 @@ public class Leader : Member
     // joystick
     public VariableJoystick variableJoystick;
 
+    // bound
     private Rigidbody selfRb;
     public bool isCollide = false;
-    [SerializeField] float boundPower = 1000.0f;
+    [SerializeField] float boundPower = 500.0f;
 
     // move
     private float currentDirection, direction, angle;
@@ -24,9 +26,10 @@ public class Leader : Member
     // active Skill
     public Button activeSkillButton;
     public GameObject skillTimeTextWrap;
+    public RawImage skillImage;
     public TMP_Text skillTimeText;
-    protected float skillTime = 10.0f;
-    protected float currentSkillTime = 0;
+    public float skillTime = 10.0f;
+    public float currentSkillTime = 0;
 
     public Vector3  startingPoint = Vector3.zero;
 
@@ -41,19 +44,25 @@ public class Leader : Member
 
         SetCharacterInfo(leaderCharacter);
         selfRb = GetComponent<Rigidbody>();
+
+        // skill setting
         activeSkillButton = GameObject.Find("Active Skill Button").GetComponent<Button>();
+        skillImage = GameObject.Find("Skill Image").GetComponent<RawImage>();
+
+        
+
+        string skillImagePath = "Image/Skill/" + leaderCharacter.skillImage;
+        Texture2D imageTexture = Resources.Load<Texture2D>(skillImagePath);
+
+        Debug.Log(skillImagePath);
+        
+        skillImage.texture = imageTexture;
+
         skillTimeTextWrap = GameObject.Find("Skill Time");
         skillTimeTextWrap.SetActive(false);
         skillTimeText = skillTimeTextWrap.GetComponentInChildren<TMP_Text>();
-    }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && currentSkillTime <= 0)
-        {
-            StartCoroutine(TimeCheck());
-            Skill();
-        }
+        activeSkillButton.onClick.AddListener(DoSkill);
     }
 
     private void FixedUpdate()
@@ -61,9 +70,11 @@ public class Leader : Member
         MovePlayer();
     }
 
-    protected virtual void Skill()
+    public virtual void DoSkill()
     {
-        currentSkillTime = skillTime;
+        if (currentSkillTime > 0) return;
+
+        StartCoroutine(SkillTimeCheck());
     }
 
     protected void OnTriggerEnter(Collider other)
@@ -73,6 +84,13 @@ public class Leader : Member
             StartCoroutine(boundCollide());
             selfRb.AddForce(-transform.forward * boundPower);
         }
+    }
+
+    public override void Damaged(int damage)
+    {
+        if (!gameController.isGameActive) return;
+
+        base.Damaged(damage);
 
         if (currentHp <= 0)
         {
@@ -82,8 +100,7 @@ public class Leader : Member
 
     void MovePlayer()
     {
-        if (!gameController.isGameActive) return;
-        if (isCollide) return;
+        if (!gameController.isGameActive || isCollide) return;
 
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
@@ -94,7 +111,8 @@ public class Leader : Member
         angle = Mathf.Atan2(variableJoystick.Direction.x, variableJoystick.Direction.y) * Mathf.Rad2Deg;
         if (angle < 0)
         {
-            angle += 360; // 각도를 0도에서 360도로 변환
+            // 각도 0~360도로 변환
+            angle += 360; 
         }
 
         direction = angle;
@@ -121,17 +139,17 @@ public class Leader : Member
         isCollide = false;
     }
 
-    private IEnumerator TimeCheck()
+    private IEnumerator SkillTimeCheck()
     {
         skillTimeTextWrap.SetActive(true);
         currentSkillTime = skillTime;
-        skillTimeText.text = currentSkillTime.ToString() + "s";
+        skillTimeText.text = currentSkillTime.ToString();
 
         while (currentSkillTime > 0)
         {
             yield return new WaitForSeconds(1);
             currentSkillTime -= 1;
-            skillTimeText.text = currentSkillTime.ToString() + "s";
+            skillTimeText.text = currentSkillTime.ToString();
         }
 
         skillTimeTextWrap.SetActive(false);

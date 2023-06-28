@@ -3,22 +3,18 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Member : MonoBehaviour 
+public class Member : MonoBehaviour, Damageable
 
 {
-    [SerializeField]  bool isLoading = true;
+    [SerializeField] bool isLoading = true;
 
     // move
-    private Vector3 targetPosition;
-    private Quaternion targetRotation;
-    public Vector3 myPath;
+    public GameObject followingTarget;
 
     // prefab
     protected GameObject myPrefab;
     protected CharacterInfo myCharacterInfo;
-
     public GameController gameController;
-    public GameObject followingTarget;
 
     // speed
     protected float speed = 8.0f;
@@ -48,7 +44,7 @@ public class Member : MonoBehaviour
         gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (isLoading) return;
         Move();
@@ -85,7 +81,7 @@ public class Member : MonoBehaviour
         isLoading = false;
     }
 
-    public void Damaged(int damage)
+    public virtual void Damaged(int damage)
     {
         if (!isDamaged)
         {
@@ -118,6 +114,11 @@ public class Member : MonoBehaviour
 
         Invoke("SetActiveFalse", 5f);
         return;
+    }
+
+    private void SetActiveFalse()
+    {
+        transform.gameObject.SetActive(false);
     }
 
     IEnumerator SetInvincible(float waitTime)

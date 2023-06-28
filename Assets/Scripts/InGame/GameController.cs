@@ -8,10 +8,12 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    // Game active
+    public bool isGameActive = true;
+
     // Game Over Screen
     public GameObject gameOverScreen;
-
-    public bool isGameActive = true;
+    public TextMeshProUGUI gameOverScoreText;
 
     // Game Level
     private int gameLevel = 1;
@@ -62,7 +64,8 @@ public class GameController : MonoBehaviour
     public void GameOver()
     {
         isGameActive = false;
-        gameOverScreen.SetActive(true);
+        gameOverScoreText.text = score.ToString();
+        StartCoroutine(GameOverScreenFadeIn());
     }
 
     IEnumerator SpawnEnemy()
@@ -119,4 +122,21 @@ public class GameController : MonoBehaviour
         Instantiate(prison, spawnPos, randomRotation);
     }
 
+    IEnumerator GameOverScreenFadeIn()
+    {
+        float fadeDuration = 3.0f;
+
+        CanvasGroup screenCanvasGroup = gameOverScreen.GetComponent<CanvasGroup>();
+        screenCanvasGroup.alpha = 0;
+        gameOverScreen.SetActive(true);
+        
+        float currentTime = 0;
+
+        while (currentTime < fadeDuration || screenCanvasGroup.alpha < 1)
+        {
+            screenCanvasGroup.alpha = currentTime / fadeDuration;
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+    }
 }

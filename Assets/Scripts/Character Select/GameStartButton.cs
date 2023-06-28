@@ -13,7 +13,7 @@ public class GameStartButton : MonoBehaviour
     public TextMeshProUGUI loadingProgressText;
 
     // loading
-    public RawImage bgImage;
+    public GameObject LoadingScreen;
 
     void Start()
     {
@@ -21,6 +21,8 @@ public class GameStartButton : MonoBehaviour
         startButton.onClick.AddListener(() => LoadScene("GameScene"));
 
         loadingProgressText.text = "";
+
+        LoadingScreen.SetActive(false);
     }
 
     public void SetInteractable(bool interactable)
@@ -56,17 +58,16 @@ public class GameStartButton : MonoBehaviour
     IEnumerator FadeIn()
     {
         float fadeDuration = 1.0f;
-        float currentAlpha = 0;
 
-        bgImage.gameObject.SetActive(true);
-        bgImage.color = new Color(0f, 0f, 0f, 0);
+        CanvasGroup screenCanvasGroup = LoadingScreen.GetComponent<CanvasGroup>();
+        screenCanvasGroup.alpha = 0;
+        LoadingScreen.SetActive(true);
 
         float currentTime = 0;
 
-        while(currentTime < fadeDuration)
+        while (currentTime < fadeDuration || screenCanvasGroup.alpha < 1)
         {
-            currentAlpha = currentTime / fadeDuration;
-            bgImage.color = new Color(0f, 0f, 0f, currentAlpha);
+            screenCanvasGroup.alpha = currentTime / fadeDuration;
             currentTime += Time.deltaTime;
             yield return null;
         }

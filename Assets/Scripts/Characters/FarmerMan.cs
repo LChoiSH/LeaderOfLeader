@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class FarmerMan : Leader
 {
-    protected override void Start()
+    public override void DoSkill()
     {
-        base.Start();
-    }
-
-    protected override void Skill()
-    {
-        base.Skill();
+        base.DoSkill();
         FarmerSkill();
     }
 
-    protected virtual void FarmerSkill()
+    private void FarmerSkill()
     {
         currentHp = maxHp;
         healthBar.SetHealth(currentHp);

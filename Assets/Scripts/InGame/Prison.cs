@@ -29,11 +29,7 @@ public class Prison : MonoBehaviour, Damageable
         characterObject = Instantiate(characterPrefab, new Vector3(transform.position.x, 0, transform.position.z), transform.rotation);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-    }
-
-    public int Damaged(int damage)
+    public void Damaged(int damage)
     {
         hp -= damage;
 
@@ -51,7 +47,5 @@ public class Prison : MonoBehaviour, Damageable
                 Destroy(gameObject);
             }
         }
-
-        return 1;
     }
 }

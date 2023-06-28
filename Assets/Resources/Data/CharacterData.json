@@ -5,6 +5,7 @@
       "name": "Business Man",
       "prefab": "Business Man",
       "missilePrefab": "Sample Missile",
+      "skillImage": "business_man_skill",
       "hp": 100,
       "speed": 10,
       "attackSpeed": 3
@@ -14,6 +15,7 @@
       "name": "Farmer Man",
       "prefab": "Farmer Man",
       "missilePrefab": "Carrot Missile",
+      "skillImage": "farmer_man_skill",
       "hp": 60,
       "speed": 10,
       "attackSpeed": 2
@@ -23,6 +25,7 @@
       "name": "Mad Man",
       "prefab": "Mad Man",
       "missilePrefab": "Sample Missile",
+      "skillImage": "mad_man_skill",
       "hp": 1,
       "speed": 10,
       "attackSpeed": 0.5

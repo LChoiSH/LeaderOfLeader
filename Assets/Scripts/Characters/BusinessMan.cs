@@ -4,19 +4,14 @@ using UnityEngine;
 
 public class BusinessMan : Leader
 {
-    protected override void Start()
+    public override void DoSkill()
     {
-        base.Start();
-    }
-
-    protected override void Skill()
-    {
-        base.Skill();
+        base.DoSkill();
 
         StartCoroutine(FarmerSkill());
     }
 
-    protected virtual IEnumerator FarmerSkill()
+    private IEnumerator FarmerSkill()
     {
 
         float currentAttackSpeed = attackSpeed;

@@ -4,19 +4,14 @@ using UnityEngine;
 
 public class MadMan : Leader
 {
-    protected override void Start()
+    public override void DoSkill()
     {
-        base.Start();
-    }
-
-    protected override void Skill()
-    {
-        base.Skill();
+        base.DoSkill();
 
         StartCoroutine(MadSkill());
     }
 
-    protected virtual IEnumerator MadSkill()
+    private IEnumerator MadSkill()
     {
 
         float currentSpeed = speed;

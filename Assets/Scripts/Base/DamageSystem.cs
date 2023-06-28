@@ -1,9 +1,9 @@
 public interface Attackable
 {
-    int Attack();
+    void Attack(Damageable damageable);
 }
 
 public interface Damageable
 {
-    public int Damaged(int damage);
+    public void Damaged(int damage);
 }

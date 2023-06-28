@@ -43,7 +43,12 @@ public class DataManager : MonoBehaviour
             characterDictionary.Add(characterInfo.id, characterInfo);
         }
 
-        isLoading= false;
+        if(characterList.Length > 0)
+        {
+            currentCharacterId = characterList[0].id;
+        }
+
+        isLoading = false;
     }
 
     public void SetCurrentCharacter(int x)

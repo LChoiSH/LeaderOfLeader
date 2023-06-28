@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -132,20 +133,16 @@ public class Enemy : MonoBehaviour, Attackable
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        Damageable damageable = collision.gameObject.GetComponent<Damageable>();
-
-        if (damageable != null && (collision.gameObject.CompareTag("Member") && collision.gameObject.CompareTag("Player"))) {
-            damageable.Damaged(damage);
+        if (other.CompareTag("Member") || other.CompareTag("Player")) {
+            Attack(other.GetComponent<Damageable>());
         }
     }
 
-    public int Attack()
+    public void Attack(Damageable damageable)
     {
-        
-
-        return 1;
+        damageable.Damaged(damage);
     }
 
     public void Damaged(int damage)
@@ -165,8 +162,7 @@ public class Enemy : MonoBehaviour, Attackable
             animator.SetBool("isHit", true);
         }
     }
-    
-    
+
     public void OnEndAttack()
     {
         SetState(EnemyState.Idle);
@@ -190,7 +186,6 @@ public class Enemy : MonoBehaviour, Attackable
 
         StartCoroutine(DestroySelf());
     }
-
 
     IEnumerator DestroySelf()
     {
