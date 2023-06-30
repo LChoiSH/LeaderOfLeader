@@ -56,9 +56,4 @@ public class ObjectPool<T> where T : Component
 
         return returnObj;
     }
-
-    public void ReturnObject(T obj)
-    {
-        obj.gameObject.SetActive(false);
-    }
 }

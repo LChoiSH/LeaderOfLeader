@@ -3,13 +3,19 @@ using System.Collections.Generic;
 //using Unity.Notifications.Android;
 using UnityEngine;
 
-public class Missile : MonoBehaviour
+public class Missile : MonoBehaviour, Attackable
 {
+    float flyingTime = 5.0f;
+
     public float speed = 10.0f;
     [SerializeField] ParticleSystem particle;
     [SerializeField] int damage = 100;
 
-    // Update is called once per frame
+    void Start()
+    {
+
+    }
+
     void Update()
     {
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
@@ -17,30 +23,22 @@ public class Missile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Prison"))
         {
-            Instantiate(particle, other.transform.position, transform.rotation);
-            other.GetComponent<Enemy>().Damaged(damage);
-            gameObject.SetActive(false);
-        }
-
-        if (other.gameObject.CompareTag("Prison"))
-        {
-            Instantiate(particle, other.transform.position, transform.rotation);
-            other.GetComponent<Prison>().Damaged(damage);
-            gameObject.SetActive(false);
+            Attack(other.GetComponent<Damageable>());
         }
     }
 
-    private void OnEnable()
+    public void Attack(Damageable damageable)
     {
-        StartCoroutine(Remove());
-    }
-
-    IEnumerator Remove()
-    {
-        yield return new WaitForSeconds(5);
+        Instantiate(particle, transform.position, transform.rotation);
+        damageable.Damaged(damage);
         gameObject.SetActive(false);
     }
 
+    IEnumerator hideSelf()
+    {
+        yield return new WaitForSeconds(flyingTime);
+        transform.gameObject.SetActive(false);
+    }
 }

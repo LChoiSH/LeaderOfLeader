@@ -14,7 +14,7 @@ public enum EnemyState
     Die
 }
 
-public class Enemy : MonoBehaviour, Attackable
+public class Enemy : MonoBehaviour, Attackable, Damageable
 {
     // Enemy FSM
     [SerializeField] private EnemyState currentState;
@@ -52,7 +52,6 @@ public class Enemy : MonoBehaviour, Attackable
         animator = GetComponentInChildren<Animator>();
         if (animator != null) animator.SetFloat("moveSpeed", 0);
 
-        // hp setting
         healthBar = gameObject.GetComponentInChildren<HealthBar>();
         healthBar.SetMaxHealth(maxHp);
         currentHp = maxHp;
@@ -63,7 +62,6 @@ public class Enemy : MonoBehaviour, Attackable
 
     void Update()
     {
-
         switch (currentState)
         {
             case EnemyState.Idle:

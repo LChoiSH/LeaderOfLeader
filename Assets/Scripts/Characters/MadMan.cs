@@ -6,6 +6,8 @@ public class MadMan : Leader
 {
     public override void DoSkill()
     {
+        if (currentSkillTime > 0) return;
+
         base.DoSkill();
 
         StartCoroutine(MadSkill());
@@ -13,11 +15,10 @@ public class MadMan : Leader
 
     private IEnumerator MadSkill()
     {
-
         float currentSpeed = speed;
         speed *= 3;
 
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(3.0f);
 
         speed = currentSpeed;
     }

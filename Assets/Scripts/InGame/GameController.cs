@@ -14,6 +14,8 @@ public class GameController : MonoBehaviour
     // Game Over Screen
     public GameObject gameOverScreen;
     public TextMeshProUGUI gameOverScoreText;
+    public TextMeshProUGUI highScoreTitleText;
+    public TextMeshProUGUI highScoreText;
 
     // Game Level
     private int gameLevel = 1;
@@ -65,6 +67,16 @@ public class GameController : MonoBehaviour
     {
         isGameActive = false;
         gameOverScoreText.text = score.ToString();
+        
+        int highScore = DataManager.instance.GetHighScore();
+        if (score > highScore)
+        {
+            DataManager.instance.SetHighScore(score);
+            highScoreTitleText.text = "New High Score!!!!!";
+        }
+
+        highScoreText.text = DataManager.instance.GetHighScore().ToString();
+
         StartCoroutine(GameOverScreenFadeIn());
     }
 

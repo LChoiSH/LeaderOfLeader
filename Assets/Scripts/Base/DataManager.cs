@@ -9,15 +9,12 @@ public class DataManager : MonoBehaviour
     public Dictionary<int, CharacterInfo> characterDictionary = new Dictionary<int, CharacterInfo>();
     public bool isLoading = false;
 
+    private int highScore;
+
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        } else
-        {
-            return;
-        }
+        if (instance == null) { instance = this; }
+        else { return; }
 
         DontDestroyOnLoad(gameObject);
     }
@@ -25,6 +22,8 @@ public class DataManager : MonoBehaviour
     void Start()
     {
         GetCharacterData();
+        highScore = PlayerPrefs.GetInt("highScore");
+
     }
 
     void GetCharacterData()
@@ -34,7 +33,6 @@ public class DataManager : MonoBehaviour
         TextAsset characterJson = Resources.Load<TextAsset>("Data/CharacterData");
         string jsonString = characterJson.ToString();
 
-        // JSON Data Deserialize
         CharacterData data = JsonUtility.FromJson<CharacterData>(jsonString);
         characterList = data.characterList;
 
@@ -54,5 +52,16 @@ public class DataManager : MonoBehaviour
     public void SetCurrentCharacter(int x)
     {
         currentCharacterId = x;
+    }
+
+    public int GetHighScore() { return highScore; }
+
+    public void SetHighScore(int newScore)
+    {
+        if(highScore < newScore)
+        {
+            highScore = newScore;
+            PlayerPrefs.SetInt("highScore", highScore);
+        }
     }
 }

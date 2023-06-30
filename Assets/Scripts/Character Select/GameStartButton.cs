@@ -14,6 +14,7 @@ public class GameStartButton : MonoBehaviour
 
     // loading
     public GameObject LoadingScreen;
+    private float progress;
 
     void Start()
     {
@@ -44,14 +45,13 @@ public class GameStartButton : MonoBehaviour
 
         while (!asyncOperation.isDone)
         {
-            float progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
+            progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
 
             loadingProgressText.text = "Now Loading... " + (progress * 100).ToString() + "%";
 
             yield return null;
         }
 
-        startButton.interactable = true;
         DataManager.instance.isLoading = false;
     }
 

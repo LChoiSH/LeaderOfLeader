@@ -6,7 +6,10 @@ public class FarmerMan : Leader
 {
     public override void DoSkill()
     {
+        if (currentSkillTime > 0) return;
+        
         base.DoSkill();
+
         FarmerSkill();
     }
 

@@ -2,8 +2,6 @@ using System.Collections;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
-//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,16 +10,15 @@ public class Leader : Member
     // turn
     [SerializeField] float turnSpeed = 100.0f;
 
-    // joystick
-    public VariableJoystick variableJoystick;
-
     // bound
     private Rigidbody selfRb;
     public bool isCollide = false;
     [SerializeField] float boundPower = 500.0f;
 
     // move
-    private float currentDirection, direction, angle;
+    public VariableJoystick variableJoystick;
+    private float inputAngle, subAngle;
+    Vector3 turnDirection;
 
     // active Skill
     public Button activeSkillButton;
@@ -32,7 +29,6 @@ public class Leader : Member
     public float currentSkillTime = 0;
 
     public Vector3  startingPoint = Vector3.zero;
-
     override protected void Start()
     {
         base.Start();
@@ -49,7 +45,6 @@ public class Leader : Member
         activeSkillButton = GameObject.Find("Active Skill Button").GetComponent<Button>();
         skillImage = GameObject.Find("Skill Image").GetComponent<RawImage>();
 
-        
         string skillImagePath = "Image/Skill/" + leaderCharacter.skillImage;
         Texture2D imageTexture = Resources.Load<Texture2D>(skillImagePath);
 
@@ -73,6 +68,22 @@ public class Leader : Member
         if (currentSkillTime > 0) return;
 
         StartCoroutine(SkillTimeCheck());
+    }
+
+    private IEnumerator SkillTimeCheck()
+    {
+        skillTimeTextWrap.SetActive(true);
+        currentSkillTime = skillTime;
+        skillTimeText.text = currentSkillTime.ToString();
+
+        while (currentSkillTime > 0)
+        {
+            yield return new WaitForSeconds(1);
+            currentSkillTime -= 1;
+            skillTimeText.text = currentSkillTime.ToString();
+        }
+
+        skillTimeTextWrap.SetActive(false);
     }
 
     protected void OnTriggerEnter(Collider other)
@@ -102,32 +113,13 @@ public class Leader : Member
 
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        currentDirection = transform.eulerAngles.y;
+        if (variableJoystick.Direction.x == 0 && variableJoystick.Direction.y == 0) return;
 
-        if (variableJoystick.Direction.x == 0 && variableJoystick.Direction.y == 0) return ;
+        inputAngle = Mathf.Atan2(variableJoystick.Direction.x, variableJoystick.Direction.y) * Mathf.Rad2Deg;
+        subAngle = (transform.eulerAngles.y + 360 - inputAngle) % 360;
+        turnDirection = (subAngle > 180 ? transform.up : -transform.up);
 
-        angle = Mathf.Atan2(variableJoystick.Direction.x, variableJoystick.Direction.y) * Mathf.Rad2Deg;
-        if (angle < 0)
-        {
-            // 각도 0~360도로 변환
-            angle += 360; 
-        }
-
-        direction = angle;
-
-        currentDirection = (currentDirection + 360 - direction) % 360;
-
-        if (transform.eulerAngles.y != direction)
-        {
-            if (180 < currentDirection)
-            {
-                transform.Rotate(transform.up, Time.deltaTime * turnSpeed);
-            }
-            else
-            {
-                transform.Rotate(-transform.up, Time.deltaTime * turnSpeed);
-            }
-        }
+        transform.Rotate(turnDirection, Time.deltaTime * turnSpeed);
     }
 
     protected IEnumerator boundCollide()
@@ -135,21 +127,5 @@ public class Leader : Member
         isCollide= true;
         yield return new WaitForSeconds(1);
         isCollide = false;
-    }
-
-    private IEnumerator SkillTimeCheck()
-    {
-        skillTimeTextWrap.SetActive(true);
-        currentSkillTime = skillTime;
-        skillTimeText.text = currentSkillTime.ToString();
-
-        while (currentSkillTime > 0)
-        {
-            yield return new WaitForSeconds(1);
-            currentSkillTime -= 1;
-            skillTimeText.text = currentSkillTime.ToString();
-        }
-
-        skillTimeTextWrap.SetActive(false);
     }
 }

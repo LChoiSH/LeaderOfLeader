@@ -17,12 +17,15 @@ public class Member : MonoBehaviour, Damageable
     public GameController gameController;
 
     // speed
-    protected float speed = 8.0f;
+    [SerializeField]protected float speed = 6.0f;
 
     // attack
     [SerializeField] protected float attackSpeed = 3.0f;
     [SerializeField] Missile missile;
-    private ObjectPool<Missile> objectPool;
+    private ObjectPool<Missile> missileObjectPool;
+    private GameObject[] attackTargetArray;
+    private float targetDistance, closestTargetDistance;
+    private float attackRange = 50.0f; 
 
     // damaged
     protected int maxHp = 100;
@@ -47,6 +50,7 @@ public class Member : MonoBehaviour, Damageable
     private void FixedUpdate()
     {
         if (isLoading) return;
+        if (!gameController.isGameActive) Die();
         Move();
     }
 
@@ -71,7 +75,7 @@ public class Member : MonoBehaviour, Damageable
 
         missile = Resources.Load<GameObject>(missilePrefabPath).GetComponent<Missile>();
 
-        objectPool = new ObjectPool<Missile>(missile, 20);
+        missileObjectPool = new ObjectPool<Missile>(missile, 20);
 
         animator = GetComponentInChildren<Animator>();
         if (animator != null) animator.SetFloat("Speed_f", speed / 10);
@@ -97,10 +101,6 @@ public class Member : MonoBehaviour, Damageable
     protected virtual void Move()
     {
         if (currentHp <= 0) return;
-
-        if (!gameController.isGameActive) Die();
-
-        Transform tempFollowing = followingTarget.transform.Find("Following Point");
         
         transform.position = Vector3.Lerp(transform.position, followingTarget.transform.position, speed * Time.deltaTime);
         transform.LookAt(followingTarget.transform.position);
@@ -153,31 +153,28 @@ public class Member : MonoBehaviour, Damageable
         {
             yield return new WaitForSeconds(attackSpeed);
 
-            GameObject[] enemyList = GameObject.FindGameObjectsWithTag("Enemy");
-            GameObject[] prisonList = GameObject.FindGameObjectsWithTag("Prison");
-            GameObject[] targets = enemyList.Concat(prisonList).ToArray();
+            attackTargetArray = GameObject.FindGameObjectsWithTag("Enemy");
+            attackTargetArray.Concat(GameObject.FindGameObjectsWithTag("Prison")).ToArray();
 
-            GameObject closest = null;
+            GameObject closestTarget = null;
+            closestTargetDistance = Mathf.Infinity;
 
-            float distance = Mathf.Infinity;
-
-            foreach (GameObject target in targets)
+            foreach (GameObject target in attackTargetArray)
             {
-                Vector3 diff = target.transform.position - transform.position;
-                float curDistance = diff.sqrMagnitude;
+                targetDistance = (target.transform.position - transform.position).magnitude;
 
-                if (curDistance < distance)
+                if (targetDistance < closestTargetDistance)
                 {
-                    closest = target;
-                    distance = curDistance;
+                    closestTarget = target;
+                    closestTargetDistance = targetDistance;
                 }
             }
 
-            if (closest != null)
+            if (closestTarget != null && closestTargetDistance <= attackRange)
             {
-                Vector3 targetDirection = closest.transform.position - transform.position;
+                Vector3 targetDirection = closestTarget.transform.position - transform.position;
 
-                objectPool.GetNextObject(transform.position, Quaternion.LookRotation(targetDirection));
+                missileObjectPool.GetNextObject(transform.position, Quaternion.LookRotation(targetDirection));
             }
         }
     }

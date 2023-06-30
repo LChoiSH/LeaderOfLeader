@@ -1,6 +1,7 @@
 using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,8 +27,8 @@ public class CharacterWrap : MonoBehaviour
 
         currentCharacter = 0;
 
-        prevButton.onClick.AddListener(prevCharacterSelect);
-        nextButton.onClick.AddListener(nextChatacterSelect);
+        prevButton.onClick.AddListener(PrevCharacterSelect);
+        nextButton.onClick.AddListener(NextChatacterSelect);
 
         infoBox.OpenBox(DataManager.instance.characterDictionary[currentCharacter].info);
     }
@@ -37,21 +38,28 @@ public class CharacterWrap : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, characterLoc, Time.deltaTime * 10);
     }
 
-    public void prevCharacterSelect()
+    private void CharacterChange(int changeCharacterId)
     {
-        currentCharacter--;
-        if (currentCharacter < 0) currentCharacter = characterList.Length - 1;
-        DataManager.instance.SetCurrentCharacter(currentCharacter);
-        characterLoc.x = -currentCharacter * 5;
+        DataManager.instance.SetCurrentCharacter(changeCharacterId);
+
+        currentCharacter = changeCharacterId;
+        characterLoc.x = -currentCharacter * characterDistance;
+
         infoBox.OpenBox(DataManager.instance.characterDictionary[currentCharacter].info);
     }
 
-    public void nextChatacterSelect()
+    public void PrevCharacterSelect()
     {
-        currentCharacter = (currentCharacter + 1) % characterList.Length;
-        DataManager.instance.SetCurrentCharacter(currentCharacter);
-        characterLoc.x = -currentCharacter * 5;
-        infoBox.OpenBox(DataManager.instance.characterDictionary[currentCharacter].info);
+        int nextCharacterId = currentCharacter - 1;
+        if (nextCharacterId < 0) nextCharacterId = characterList.Length - 1;
+
+        CharacterChange(nextCharacterId);
     }
 
+    public void NextChatacterSelect()
+    {
+        int nextCharacterId = (currentCharacter + 1) % characterList.Length;
+
+        CharacterChange(nextCharacterId);
+    }
 }

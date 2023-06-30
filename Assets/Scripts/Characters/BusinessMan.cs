@@ -6,6 +6,8 @@ public class BusinessMan : Leader
 {
     public override void DoSkill()
     {
+        if (currentSkillTime > 0) return;
+
         base.DoSkill();
 
         StartCoroutine(FarmerSkill());

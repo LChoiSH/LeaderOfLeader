@@ -9,11 +9,12 @@ public class InformationBox : MonoBehaviour
     public TextMeshProUGUI linkText;
     public string currentText = "";
     [SerializeField] private float writeSpeed = 0.03f;
-    private Coroutine playingWriting;
+    Coroutine playingWriting;
 
-    void Start()
+    private void Awake()
     {
         linkText = GameObject.Find("Info Text").GetComponent<TextMeshProUGUI>();
+        linkText.text = currentText;
     }
 
     public void OpenBox(string text)
@@ -21,15 +22,16 @@ public class InformationBox : MonoBehaviour
         currentText = text;
 
         if (playingWriting != null) StopCoroutine(playingWriting);
+        
         playingWriting = StartCoroutine(WriteText());
     }
 
     IEnumerator WriteText()
     {
-        linkText.text = "";
+        linkText.text = " ";
         int index = 0;
 
-        while(index < currentText.Length)
+        while (index < currentText.Length)
         {
             yield return new WaitForSeconds(writeSpeed);
 
