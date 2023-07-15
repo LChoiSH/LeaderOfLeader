@@ -78,7 +78,7 @@ public class Member : MonoBehaviour, Damageable
         missileObjectPool = new ObjectPool<Missile>(missile, 20);
 
         animator = GetComponentInChildren<Animator>();
-        if (animator != null) animator.SetFloat("Speed_f", speed / 10);
+        if (animator != null) animator.SetTrigger("TriggerRun");
 
         StartCoroutine(FireClosestTarget());
 
@@ -102,15 +102,24 @@ public class Member : MonoBehaviour, Damageable
     {
         if (currentHp <= 0) return;
         
+        //transform.position = Vector3.Lerp(transform.position, followingTarget.transform.position, speed * Time.deltaTime);
+        //transform.LookAt(followingTarget.transform.position);
+        StartCoroutine(FollowTarget());
+    }
+
+    IEnumerator FollowTarget()
+    {
+        Vector3 targetPosition = followingTarget.transform.position;
+        Quaternion targetRotation = followingTarget.transform.rotation;
+        yield return new WaitForSeconds(2);
         transform.position = Vector3.Lerp(transform.position, followingTarget.transform.position, speed * Time.deltaTime);
-        transform.LookAt(followingTarget.transform.position);
+        transform.rotation = targetRotation;
     }
 
     private void Die()
     {
         currentHp = 0;
-        animator.SetInteger("DeathType_int", 2);
-        animator.SetBool("Death_b", true);
+        animator.SetTrigger("TriggerDeath");
 
         Invoke("SetActiveFalse", 5f);
         return;

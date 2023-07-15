@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
 {
     // Game active
     public bool isGameActive = true;
+    public bool isClear = false;
+    public bool isReward = false;
 
     // Game Over Screen
     public GameObject gameOverScreen;
@@ -17,19 +19,23 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI highScoreTitleText;
     public TextMeshProUGUI highScoreText;
 
+    // Reward Manager
+    public RewardManager rewardManager;
+
     // Game Level
     private int gameLevel = 1;
     public TextMeshProUGUI levelText;
+    public NextLevelDoor nextLevelDoor;
 
-    // enemy spawn Time
+    // enemy spawn
     [SerializeField] float spawnTime = 2.0f;
+    HashSet<GameObject> enemies;
 
-    private float mapBound = 40.0f;
+    public Vector3 mapBound;
     public float spawnExceptRange = 10.0f;
     private GameObject player;
     public GameObject[] spawnPrefabs;
     public TextMeshProUGUI scoreText;
-    private int score = 0;
 
     // prison prefab
     [SerializeField] GameObject prison;
@@ -38,7 +44,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player");
-        CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacterId];
+        CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
         string characterName = leaderCharacter.name.Replace(" ", "");
         System.Type componentType = System.Type.GetType(characterName);
 
@@ -47,25 +53,44 @@ public class GameController : MonoBehaviour
             Component newComponent = player.AddComponent(componentType);
         }
 
-        GameStart();
+        enemies = new HashSet<GameObject>();
+
+        isClear = false;
+
+        StartCoroutine(GameStart());
     }
 
-    public void GameStart()
+    IEnumerator GameStart()
     {
-        isGameActive = true;
+        isGameActive = false;
         gameOverScreen.SetActive(false);
-        GetScore(0);
-        StartCoroutine(SpawnEnemy());
+        //GetScore(0);
+        //StartCoroutine(SpawnEnemy());
+
+        // Å©±â
+        GameObject floor = GameObject.Find("Floor");
+
+        Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
+        mapBound = mapSize;
+
+        SpawnEnemy(DataManager.instance.gameLevel);
+
+        yield return new WaitForSeconds(1.5f);
+
+        isGameActive = true;
     }
 
     public void GameRestart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log("Game Restart");
+        rewardManager.RewardScreenIn();
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void GameOver()
     {
         isGameActive = false;
+        int score = DataManager.instance.currentScore;
         gameOverScoreText.text = score.ToString();
         
         int highScore = DataManager.instance.GetHighScore();
@@ -93,8 +118,8 @@ public class GameController : MonoBehaviour
 
             do
             {
-                randomX = Random.Range(-mapBound, mapBound);
-                randomZ = Random.Range(-mapBound, mapBound);
+                randomX = Random.Range(-mapBound.x / 2, mapBound.x / 2);
+                randomZ = Random.Range(-mapBound.z / 2, mapBound.z / 2);
                 randomIndex = Random.Range(0, spawnPrefabs.Length);
 
                 spawnPos = new Vector3(randomX, 0, randomZ);
@@ -108,20 +133,58 @@ public class GameController : MonoBehaviour
 
             } while (playerDistance < spawnExceptRange);
         }
+    }
 
-        
+    public void SpawnEnemy(int enemyNum)
+    {
+        float randomX, randomZ;
+        int randomIndex;
+        Vector3 spawnPos;
+
+        for(int i = 0;i < enemyNum;i++)
+        {
+            randomX = Random.Range(-mapBound.x / 2, mapBound.x / 2);
+            randomZ = Random.Range(-mapBound.z / 2, mapBound.z / 2);
+            randomIndex = Random.Range(0, spawnPrefabs.Length);
+
+            spawnPos = new Vector3(randomX, 0, randomZ);
+            GameObject spawnEnemy = Instantiate(spawnPrefabs[randomIndex], spawnPos, spawnPrefabs[randomIndex].transform.rotation);
+            Enemy inputEnemy = spawnEnemy.GetComponent<Enemy>();
+            inputEnemy.AddDieDelegate(RemoveEnemy);
+
+            enemies.Add(spawnEnemy);
+        }
+    }
+
+    void RemoveEnemy(GameObject removeEnemy)
+    {
+        enemies.Remove(removeEnemy);
+
+        if(enemies.Count == 0)
+        {
+            DataManager.instance.gameLevel++;
+
+            isClear = true;
+            nextLevelDoor.LightOn();
+        }
     }
 
     public void GetScore(int value)
     {
-        score += value;
-        scoreText.text = score.ToString();
-
-        if(score % 10 == 0)
-        {
-            LevelUp(score / 10);
-        }
+        DataManager.instance.currentScore += value;
+        scoreText.text = DataManager.instance.currentScore.ToString();
     }
+
+    //public void GetScore(int value)
+    //{
+    //    score += value;
+    //    scoreText.text = score.ToString();
+
+    //    if(score % 10 == 0)
+    //    {
+    //        LevelUp(score / 10);
+    //    }
+    //}
 
     public void LevelUp(int level)
     {
@@ -130,8 +193,8 @@ public class GameController : MonoBehaviour
         Quaternion randomRotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
 
         // spawn Prison
-        Vector3 spawnPos = new Vector3(Random.Range(-mapBound, mapBound), 2.5f, Random.Range(-mapBound, mapBound));
-        Instantiate(prison, spawnPos, randomRotation);
+        //Vector3 spawnPos = new Vector3(Random.Range(-mapBound, mapBound), 2.5f, Random.Range(-mapBound, mapBound));
+        //Instantiate(prison, spawnPos, randomRotation);
     }
 
     IEnumerator GameOverScreenFadeIn()

@@ -28,13 +28,13 @@ public class Leader : Member
     public float skillTime = 10.0f;
     public float currentSkillTime = 0;
 
-    public Vector3  startingPoint = Vector3.zero;
+    //public Vector3  startingPoint = Vector3.zero;
     override protected void Start()
     {
         base.Start();
-        transform.position = startingPoint;
+        //transform.position = startingPoint;
 
-        CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacterId];
+        CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
 
         variableJoystick = GameObject.Find("Joystick").GetComponent<VariableJoystick>();
 
@@ -47,7 +47,6 @@ public class Leader : Member
 
         string skillImagePath = "Image/Skill/" + leaderCharacter.skillImage;
         Texture2D imageTexture = Resources.Load<Texture2D>(skillImagePath);
-
         
         skillImage.texture = imageTexture;
 
@@ -88,6 +87,7 @@ public class Leader : Member
 
     protected void OnTriggerEnter(Collider other)
     {
+        if (!gameController.isGameActive) return;
         if (other.CompareTag("Bound") || other.CompareTag("Prison"))
         {
             StartCoroutine(boundCollide());
@@ -109,13 +109,15 @@ public class Leader : Member
 
     void MovePlayer()
     {
-        if (!gameController.isGameActive || isCollide) return;
+        if (isCollide) return;
 
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
+        if (!gameController.isGameActive) return;
         if (variableJoystick.Direction.x == 0 && variableJoystick.Direction.y == 0) return;
 
         inputAngle = Mathf.Atan2(variableJoystick.Direction.x, variableJoystick.Direction.y) * Mathf.Rad2Deg;
+
         subAngle = (transform.eulerAngles.y + 360 - inputAngle) % 360;
         turnDirection = (subAngle > 180 ? transform.up : -transform.up);
 

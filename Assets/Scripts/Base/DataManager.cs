@@ -4,12 +4,15 @@ using UnityEngine;
 public class DataManager : MonoBehaviour
 {
     public static DataManager instance;
-    public int currentCharacterId;
     public CharacterInfo[] characterList;
+    public Dictionary<int, RewardInfo> rewardDictionary = new Dictionary<int, RewardInfo>();
+    public RewardInfo[] rewardList;
     public Dictionary<int, CharacterInfo> characterDictionary = new Dictionary<int, CharacterInfo>();
     public bool isLoading = false;
-
+    public int currentScore = 0;
     private int highScore;
+    public int currentCharacter { get; set; }
+    public int gameLevel { get; set; }
 
     private void Awake()
     {
@@ -21,15 +24,18 @@ public class DataManager : MonoBehaviour
 
     void Start()
     {
-        GetCharacterData();
-        highScore = PlayerPrefs.GetInt("highScore");
+        isLoading = true;
 
+        GetCharacterData();
+        GetRewardData();
+        highScore = PlayerPrefs.GetInt("highScore");
+        gameLevel = 1;
+
+        isLoading = false;
     }
 
     void GetCharacterData()
     {
-        isLoading = true;
-
         TextAsset characterJson = Resources.Load<TextAsset>("Data/CharacterData");
         string jsonString = characterJson.ToString();
 
@@ -43,15 +49,24 @@ public class DataManager : MonoBehaviour
 
         if(characterList.Length > 0)
         {
-            currentCharacterId = characterList[0].id;
+            currentCharacter = characterList[0].id;
         }
-
-        isLoading = false;
     }
 
-    public void SetCurrentCharacter(int x)
+    void GetRewardData()
     {
-        currentCharacterId = x;
+        TextAsset rewardJson = Resources.Load<TextAsset>("Data/RewardData");
+        string jsonString = rewardJson.ToString();
+
+        RewardData data = JsonUtility.FromJson<RewardData>(jsonString);
+        rewardList = data.rewardList;
+
+        for(int i = 0;i < rewardList.Length;i++)
+        {
+            rewardDictionary.Add(i, rewardList[i]);
+        }
+
+        Debug.Log(rewardList[0].info);
     }
 
     public int GetHighScore() { return highScore; }

@@ -13,7 +13,7 @@ public class Missile : MonoBehaviour, Attackable
 
     void Start()
     {
-
+        StartCoroutine(HideSelf());
     }
 
     void Update()
@@ -36,7 +36,7 @@ public class Missile : MonoBehaviour, Attackable
         gameObject.SetActive(false);
     }
 
-    IEnumerator hideSelf()
+    IEnumerator HideSelf()
     {
         yield return new WaitForSeconds(flyingTime);
         transform.gameObject.SetActive(false);

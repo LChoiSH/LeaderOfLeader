@@ -1,6 +1,7 @@
 using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 public class CharacterWrap : MonoBehaviour
 {
     public CharacterInfo[] characterList;
+    private GameObject[] characterObjectList; 
     public int currentCharacter = 0;
     public Button prevButton;
     public Button nextButton;
@@ -18,14 +20,16 @@ public class CharacterWrap : MonoBehaviour
     void Start()
     {
         characterList = DataManager.instance.characterList;
+        characterObjectList = new GameObject[characterList.Length];
 
         for (int i = 0; i < characterList.Length; i++)
         {
             GameObject prefabObject = Resources.Load<GameObject>("Prefabs/Character/" + characterList[i].prefab);
-            Instantiate(prefabObject, new Vector3(i * characterDistance, 0, 0), Quaternion.Euler(0, 120, 0), transform);
+            characterObjectList[i] = Instantiate(prefabObject, new Vector3(i * characterDistance, 0, 0), Quaternion.Euler(0, 120, 0), transform);
         }
 
         currentCharacter = 0;
+        CharacterChange(currentCharacter);
 
         prevButton.onClick.AddListener(PrevCharacterSelect);
         nextButton.onClick.AddListener(NextChatacterSelect);
@@ -40,12 +44,18 @@ public class CharacterWrap : MonoBehaviour
 
     private void CharacterChange(int changeCharacterId)
     {
-        DataManager.instance.SetCurrentCharacter(changeCharacterId);
+        Animator currentAnimator = characterObjectList[currentCharacter].GetComponentInChildren<Animator>();
+        currentAnimator.SetTrigger("TriggerIdle");
+
+        DataManager.instance.currentCharacter = changeCharacterId;
 
         currentCharacter = changeCharacterId;
+        Debug.Log(changeCharacterId);
         characterLoc.x = -currentCharacter * characterDistance;
 
-        infoBox.OpenBox(DataManager.instance.characterDictionary[currentCharacter].info);
+        infoBox.OpenBox(DataManager.instance.characterDictionary[changeCharacterId].info);
+
+        StartCoroutine(AnimRun(changeCharacterId));
     }
 
     public void PrevCharacterSelect()
@@ -61,5 +71,13 @@ public class CharacterWrap : MonoBehaviour
         int nextCharacterId = (currentCharacter + 1) % characterList.Length;
 
         CharacterChange(nextCharacterId);
+    }
+
+    IEnumerator AnimRun(int changeCharacterId)
+    {
+        yield return new WaitForSeconds(0.5f);
+        Animator nextAnimator = characterObjectList[changeCharacterId].GetComponentInChildren<Animator>();
+        nextAnimator.ResetTrigger("TriggerIdle");
+        nextAnimator.SetTrigger("TriggerRun");
     }
 }
