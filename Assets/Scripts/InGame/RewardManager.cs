@@ -6,23 +6,24 @@ using UnityEditor.Android;
 using UnityEngine;
 using UnityEngine.UI;
 
+using System;
+using System.Reflection;
+
 public class RewardManager : MonoBehaviour
 {
     GameController gameController;
     public GameObject rewardScreen;
     public GameObject rewardButtonPrefab;
+    public Rewards rewards;
 
     // Start is called before the first frame update
     void Start()
     {
         gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
         gameObject.SetActive(false);
-    }
+        Debug.Log("real");
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        rewards = new Rewards();
     }
 
     public void RewardScreenIn()
@@ -33,43 +34,51 @@ public class RewardManager : MonoBehaviour
 
         for(int i = 0;i < 3;i++)
         {
-            Debug.Log("plz 1");
-
             GameObject buttonGo = Instantiate(rewardButtonPrefab, rewardScreen.transform);
-            Debug.Log("plz 2");
 
             buttonGo.SetActive(true);
 
             Button button = buttonGo.GetComponent<Button>();
-            Debug.Log("plz 3");
 
             RectTransform rectTransform = button.GetComponent<RectTransform>();
-            Debug.Log("plz 4");
 
             rectTransform.offsetMin = new Vector2(50 , positionY * i);
             rectTransform.offsetMax = new Vector2(50 , positionY * i);
             rectTransform.sizeDelta = new Vector2(0, 200);
             
-            Debug.Log("plz 5");
-
-            //TextMeshProUGUI nameText = button.transform.Find("Reward name text").GetComponent<TextMeshProUGUI>();
             TextMeshProUGUI nameText = button.GetComponentInChildren<TextMeshProUGUI>();
-            //TextMeshProUGUI infoText = button.transform.Find("Reward info text").GetComponent<TextMeshProUGUI>();
             TextMeshProUGUI infoText = button.GetComponentInChildren<TextMeshProUGUI>();
-            Debug.Log("plz 6");
 
-            RewardInfo rewardInfo = DataManager.instance.rewardList[Random.Range(0, DataManager.instance.rewardList.Length)];
-            Debug.Log("plz 7");
+            //RewardInfo rewardInfo = DataManager.instance.rewardList[Random.Range(i, DataManager.instance.rewardList.Length)];
+            RewardInfo rewardInfo = DataManager.instance.rewardList[i];
+
+            button.onClick.AddListener(() => tempDo(rewardInfo.name));
+            button.onClick.AddListener(() => gameController.GameRestart());
 
             nameText.text = rewardInfo.name;
             infoText.text = rewardInfo.info;
-            Debug.Log("plz 8");
-
         }
-        Debug.Log("plz 2");
-
 
         StartCoroutine(RewardScreenFadeIn());
+    }
+
+    void tempDo(string methodName)
+    {
+        // 메서드를 가져올 타입
+        System.Type targetType = typeof(Rewards);
+
+        // 메서드의 이름
+        string method = methodName;
+
+        // 메서드 정보 가져오기
+        MethodInfo methodInfo = targetType.GetMethod(methodName);
+
+        // 가져온 메서드 실행
+        if (methodInfo != null)
+        {
+            object instance = Activator.CreateInstance(targetType);
+            methodInfo.Invoke(instance, null);
+        }
     }
 
     public void RewardScreenOut()

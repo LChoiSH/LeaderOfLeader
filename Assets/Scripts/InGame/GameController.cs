@@ -67,7 +67,7 @@ public class GameController : MonoBehaviour
         //GetScore(0);
         //StartCoroutine(SpawnEnemy());
 
-        // Å©±â
+        // ????
         GameObject floor = GameObject.Find("Floor");
 
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
@@ -82,9 +82,7 @@ public class GameController : MonoBehaviour
 
     public void GameRestart()
     {
-        Debug.Log("Game Restart");
-        rewardManager.RewardScreenIn();
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void GameOver()

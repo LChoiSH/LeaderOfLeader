@@ -8,6 +8,7 @@ public class NextLevelDoor : MonoBehaviour
     private float maxLightIntensity = 7.0f;
     public Collider selfCollider;
     public GameController gameController;
+    public RewardManager rewardManager;
 
     void Start()
     {
@@ -24,7 +25,7 @@ public class NextLevelDoor : MonoBehaviour
         {
             if (other.gameObject.CompareTag("Player") || other.transform.parent.CompareTag("Player"))
             {
-                gameController.GameRestart();
+                rewardManager.RewardScreenIn();
             }
         } catch
         {

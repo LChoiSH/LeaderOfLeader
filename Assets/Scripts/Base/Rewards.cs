@@ -5,33 +5,37 @@ using UnityEngine;
 
 enum RewardEnum { InputMember, HealCharacters, c };
 
-public class Rewards : MonoBehaviour
+public class Rewards
 {
     string[] rewardsList;
 
     // Start is called before the first frame update
-    void Start()
+    //void Start()
+    //{
+    //    rewardsList = Enum.GetNames(typeof(RewardEnum));
+    //}
+
+    //void RandomRewards()
+    //{
+    //    while(true)
+    //    {
+    //        int randomIndex = UnityEngine.Random.Range(0, rewardsList.Length);
+    //        Invoke(rewardsList[randomIndex], 0);
+    //    }
+    //}
+
+    public static void AddMember()
     {
-        rewardsList = Enum.GetNames(typeof(RewardEnum));
+        Debug.Log("AddMember");
     }
 
-    void RandomRewards()
+    public static void HealCharacters()
     {
-        while(true)
-        {
-            int randomIndex = UnityEngine.Random.Range(0, rewardsList.Length);
-            Invoke(rewardsList[randomIndex], 0);
-        }
+        Debug.Log("HealCharacters");
     }
 
-    void InputMember()
+    public static void CancelReward()
     {
-        Debug.Log("inputMember");
-    }
-
-    void HealCharacters()
-    {
-        Debug.Log("inputMember");
-        //GameObject.Find("Members");
+        Debug.Log("CancelReward");
     }
 }

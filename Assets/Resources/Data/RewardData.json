@@ -1,14 +1,19 @@
 {
-  "rewardList": [
-    {
-      "name": "Add Member",
-      "title": "멤버 영입",
-      "info": "무작위 멤버를 영입합니다."
-    },
-    {
-      "name": "Add Member",
-      "title": "멤버 영입",
-      "info": "무작위 멤버를 영입합니다."
-    }
-  ]
+    "rewardList": [
+        {
+            "name": "AddMember",
+            "title": "멤버 영입",
+            "info": "무작위 멤버를 영입합니다."
+        },
+        {
+            "name": "HealCharacters",
+            "title": "캐릭터 회복",
+            "info": "모든 캐릭터의 체력을 회복합니다."
+        },
+        {
+            "name": "CancelReward",
+            "title": "리워드 캔슬",
+            "info": "테스트용 입니다."
+        }
+    ]
 }
