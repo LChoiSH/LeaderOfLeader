@@ -5,16 +5,24 @@ using static UnityEngine.GraphicsBuffer;
 
 public class MainCamera : MonoBehaviour
 {
+    public static MainCamera instance;
+
     private GameObject player;
     [SerializeField]private Vector3 offset = new Vector3(0, 17.0f, -8.0f);
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        if (instance == null) { instance = this; }
+        else { return; }
+
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Start()
     {
         player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
     void LateUpdate()
     {
         transform.position = player.transform.position + offset;

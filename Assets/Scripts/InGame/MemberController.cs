@@ -6,20 +6,47 @@ using UnityEngine;
 
 public class MemberController : MonoBehaviour
 {
-    public Member[] members;
-    public GameObject hpBar;
+    public static MemberController instance;
+    public GameObject player;
 
-    public Member addMember()
+
+    private void Awake()
     {
-        for(int i = 0; i < members.Length;i++)
+        if(instance != null)
         {
-            if (members[i].gameObject.activeSelf == false)
-            {
-                members[i].gameObject.SetActive(true);
-                return members[i];
-            }
+            DestroyImmediate(instance);
+            return ;
+        } else
+        {
+            instance = this;
         }
 
-        return null;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        player = GameObject.Find("Player");
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            AddMember();
+        }
+    }
+
+    public void AddMember()
+    {
+        Member1[] members = GetComponentsInChildren<Member1>();
+
+        GameObject memberObject = new GameObject("Member");
+        memberObject.transform.parent = transform;
+        Member1 member = memberObject.AddComponent<Member1>();
+
+        GameObject followTarget = (members.Length == 0 ? player : members[members.Length - 1].gameObject);
+
+        member.SetCharacterInfo(DataManager.instance.characterList[0], followTarget);
     }
 }

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class Leader : Member
 {
+    public static Leader instance;
+
     // turn
     [SerializeField] float turnSpeed = 100.0f;
 
@@ -28,11 +30,27 @@ public class Leader : Member
     public float skillTime = 10.0f;
     public float currentSkillTime = 0;
 
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            DestroyImmediate(instance);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
+
     //public Vector3  startingPoint = Vector3.zero;
     override protected void Start()
     {
         base.Start();
         //transform.position = startingPoint;
+
 
         CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
 

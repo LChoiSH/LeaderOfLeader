@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectPool<T> where T : Component
@@ -55,5 +56,13 @@ public class ObjectPool<T> where T : Component
         returnObj.gameObject.SetActive(true);
 
         return returnObj;
+    }
+
+    public void DestroyPool()
+    {
+        foreach(T obj in pool)
+        {
+            GameObject.Destroy(obj.gameObject);
+        }
     }
 }

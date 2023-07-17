@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3041520552476272004}
   - component: {fileID: 3041520552476272008}
   m_Layer: 5
-  m_Name: Hp Bar
+  m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

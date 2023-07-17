@@ -33,19 +33,19 @@ public class Prison : MonoBehaviour, Damageable
     {
         hp -= damage;
 
-        if(hp <= 0)
-        {
-            Member myMember = memberController.addMember();
+        //if(hp <= 0)
+        //{
+        //    Member myMember = memberController.addMember();
 
-            if (myMember != null)
-            {
-                myMember.transform.position = transform.position;
-                myMember.transform.rotation = transform.rotation;
-                myMember.SetCharacterInfo(characterInfo);
+        //    if (myMember != null)
+        //    {
+        //        myMember.transform.position = transform.position;
+        //        myMember.transform.rotation = transform.rotation;
+        //        myMember.SetCharacterInfo(characterInfo);
 
-                Destroy(characterObject);
-                Destroy(gameObject);
-            }
-        }
+        //        Destroy(characterObject);
+        //        Destroy(gameObject);
+        //    }
+        //}
     }
 }

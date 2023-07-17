@@ -11,6 +11,11 @@ public class Missile : MonoBehaviour, Attackable
     [SerializeField] ParticleSystem particle;
     [SerializeField] int damage = 100;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     void Start()
     {
         StartCoroutine(HideSelf());
