@@ -80,6 +80,11 @@ public class GameController : MonoBehaviour
         isGameActive = true;
     }
 
+    public void nextStage()
+    {
+
+    }
+
     public void GameRestart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

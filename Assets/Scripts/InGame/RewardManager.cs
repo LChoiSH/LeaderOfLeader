@@ -21,7 +21,6 @@ public class RewardManager : MonoBehaviour
     {
         gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
         gameObject.SetActive(false);
-        Debug.Log("real");
 
         rewards = new Rewards();
     }
@@ -42,15 +41,16 @@ public class RewardManager : MonoBehaviour
 
             RectTransform rectTransform = button.GetComponent<RectTransform>();
 
-            rectTransform.offsetMin = new Vector2(50 , positionY * i);
-            rectTransform.offsetMax = new Vector2(50 , positionY * i);
-            rectTransform.sizeDelta = new Vector2(0, 200);
-            
+            rectTransform.anchoredPosition = new Vector2(0, 0.5f);
+            rectTransform.anchoredPosition = new Vector2(1, 0.5f);
+            rectTransform.offsetMin = new Vector2(50, positionY * i);
+            rectTransform.offsetMax = new Vector2(-50, positionY * i);
+            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, 200f);
+
             TextMeshProUGUI nameText = button.GetComponentInChildren<TextMeshProUGUI>();
             TextMeshProUGUI infoText = button.GetComponentInChildren<TextMeshProUGUI>();
 
-            //RewardInfo rewardInfo = DataManager.instance.rewardList[Random.Range(i, DataManager.instance.rewardList.Length)];
-            RewardInfo rewardInfo = DataManager.instance.rewardList[i];
+            RewardInfo rewardInfo = DataManager.instance.rewardList[UnityEngine.Random.Range(i, DataManager.instance.rewardList.Length)];
 
             button.onClick.AddListener(() => tempDo(rewardInfo.name));
             button.onClick.AddListener(() => gameController.GameRestart());
