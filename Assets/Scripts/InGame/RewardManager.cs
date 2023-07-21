@@ -16,11 +16,15 @@ public class RewardManager : MonoBehaviour
     public GameObject rewardButtonPrefab;
     public Rewards rewards;
 
+    private void Awake()
+    {
+        gameObject.SetActive(false);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
-        gameObject.SetActive(false);
 
         rewards = new Rewards();
     }
@@ -54,12 +58,13 @@ public class RewardManager : MonoBehaviour
 
             button.onClick.AddListener(() => tempDo(rewardInfo.name));
             button.onClick.AddListener(() => gameController.GameRestart());
+            button.onClick.AddListener(() => ScreenHide());
 
             nameText.text = rewardInfo.name;
             infoText.text = rewardInfo.info;
         }
 
-        StartCoroutine(RewardScreenFadeIn());
+        ScreenShow();
     }
 
     void tempDo(string methodName)
@@ -86,10 +91,20 @@ public class RewardManager : MonoBehaviour
         StartCoroutine(RewardScreenFadeOut());
     }
 
+    void ScreenShow()
+    {
+        gameObject.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    void ScreenHide()
+    {
+        Time.timeScale = 1;
+        gameObject.SetActive(false);
+    }
+
     IEnumerator RewardScreenFadeIn()
     {
-        Debug.Log("rewardScreenFadeIn");
-
         float fadeDuration = 3.0f;
 
         CanvasGroup screenCanvasGroup = rewardScreen.GetComponent<CanvasGroup>();

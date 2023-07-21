@@ -25,6 +25,11 @@ public class MainCamera : MonoBehaviour
 
     void LateUpdate()
     {
+        if (player == null)
+        {
+            player = GameObject.Find("Player");
+            return;
+        }
         transform.position = player.transform.position + offset;
     }
 }

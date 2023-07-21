@@ -9,7 +9,6 @@ public class MemberController : MonoBehaviour
     public static MemberController instance;
     public GameObject player;
 
-
     private void Awake()
     {
         if(instance != null)
@@ -35,6 +34,17 @@ public class MemberController : MonoBehaviour
         {
             AddMember();
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if(Time.timeScale == 0)
+            {
+                Time.timeScale = 1;
+            } else
+            {
+                Time.timeScale = 0;
+            }
+        }
     }
 
     public void AddMember()
@@ -47,6 +57,6 @@ public class MemberController : MonoBehaviour
 
         GameObject followTarget = (members.Length == 0 ? player : members[members.Length - 1].gameObject);
 
-        member.SetCharacterInfo(DataManager.instance.characterList[0], followTarget);
+        member.SetCharacterInfo(DataManager.instance.characterList[Random.Range(0, DataManager.instance.characterList.Length)], followTarget);
     }
 }

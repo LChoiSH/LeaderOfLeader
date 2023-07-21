@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Leader : Member
+public class Leader : MonoBehaviour
 {
     public static Leader instance;
 
@@ -16,6 +16,8 @@ public class Leader : Member
     private Rigidbody selfRb;
     public bool isCollide = false;
     [SerializeField] float boundPower = 500.0f;
+
+    protected float speed = 6.0f;
 
     // move
     public VariableJoystick variableJoystick;
@@ -34,7 +36,7 @@ public class Leader : Member
     {
         if (instance != null)
         {
-            DestroyImmediate(instance);
+            Destroy(instance);
             return;
         }
         else
@@ -45,18 +47,12 @@ public class Leader : Member
         DontDestroyOnLoad(gameObject);
     }
 
-    //public Vector3  startingPoint = Vector3.zero;
-    override protected void Start()
+     void Start()
     {
-        base.Start();
-        //transform.position = startingPoint;
-
-
         CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
 
         variableJoystick = GameObject.Find("Joystick").GetComponent<VariableJoystick>();
 
-        SetCharacterInfo(leaderCharacter);
         selfRb = GetComponent<Rigidbody>();
 
         // skill setting
@@ -105,23 +101,11 @@ public class Leader : Member
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (!gameController.isGameActive) return;
+        if (!GameController.instance.isGameActive) return;
         if (other.CompareTag("Bound") || other.CompareTag("Prison"))
         {
             StartCoroutine(boundCollide());
             selfRb.AddForce(-transform.forward * boundPower);
-        }
-    }
-
-    public override void Damaged(int damage)
-    {
-        if (!gameController.isGameActive) return;
-
-        base.Damaged(damage);
-
-        if (currentHp <= 0)
-        {
-            gameController.GameOver();
         }
     }
 
@@ -131,7 +115,7 @@ public class Leader : Member
 
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
-        if (!gameController.isGameActive) return;
+        if (!GameController.instance.isGameActive) return;
         if (variableJoystick.Direction.x == 0 && variableJoystick.Direction.y == 0) return;
 
         inputAngle = Mathf.Atan2(variableJoystick.Direction.x, variableJoystick.Direction.y) * Mathf.Rad2Deg;

@@ -48,12 +48,14 @@ public class Member1 : MonoBehaviour, Damageable
     private void FixedUpdate()
     {
         if (isLoading) return;
-        if (!gameController.isGameActive) Die();
         Move();
     }
 
-    public void SetCharacterInfo (CharacterInfo characterInfo, GameObject followingTarget)
+    #nullable enable
+    public void SetCharacterInfo (CharacterInfo characterInfo, GameObject? followingTarget)
     {
+        Debug.Log(0);
+
         myCharacterInfo= characterInfo;
 
         attackSpeed = characterInfo.attackSpeed;
@@ -84,8 +86,11 @@ public class Member1 : MonoBehaviour, Damageable
 
         StartCoroutine(FireClosestTarget());
 
-        this.followingTarget = followingTarget;
-        transform.position = this.followingTarget.transform.position;
+        if(followingTarget != null)
+        {
+            this.followingTarget = followingTarget;
+            transform.position = this.followingTarget.transform.position;
+        }
 
         isLoading = false;
     }
@@ -116,6 +121,7 @@ public class Member1 : MonoBehaviour, Damageable
 
     protected virtual void Move()
     {
+        if (followingTarget == null) return;
         if (currentHp <= 0) return;
         
         StartCoroutine(FollowTarget());

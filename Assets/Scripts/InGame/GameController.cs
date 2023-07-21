@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
@@ -8,13 +9,15 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    public static GameController instance;
+
     // Game active
     public bool isGameActive = true;
     public bool isClear = false;
     public bool isReward = false;
 
     // Game Over Screen
-    public GameObject gameOverScreen;
+    public GameOverScreen gameOverScreen;
     public TextMeshProUGUI gameOverScoreText;
     public TextMeshProUGUI highScoreTitleText;
     public TextMeshProUGUI highScoreText;
@@ -27,31 +30,51 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI levelText;
     public NextLevelDoor nextLevelDoor;
 
+    // player
+    private GameObject player;
+    private GameObject startPoint;
+
     // enemy spawn
-    [SerializeField] float spawnTime = 2.0f;
     HashSet<GameObject> enemies;
 
     public Vector3 mapBound;
     public float spawnExceptRange = 10.0f;
-    private GameObject player;
     public GameObject[] spawnPrefabs;
     public TextMeshProUGUI scoreText;
 
     // prison prefab
     [SerializeField] GameObject prison;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        if (instance != null)
+        {
+            DestroyImmediate(instance);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Start()
     {
-        player = GameObject.Find("Player");
-        CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
-        string characterName = leaderCharacter.name.Replace(" ", "");
-        System.Type componentType = System.Type.GetType(characterName);
+        startPoint = GameObject.Find("StartPoint");
 
-        if (componentType != null)
-        {
-            Component newComponent = player.AddComponent(componentType);
-        }
+        MakePlayer();
+
+        //player = GameObject.Find("Player");
+        //CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
+        //string characterName = leaderCharacter.name.Replace(" ", "");
+        //System.Type componentType = System.Type.GetType(characterName);
+
+        //if (componentType != null)
+        //{
+        //    Component newComponent = player.AddComponent(componentType);
+        //}
 
         enemies = new HashSet<GameObject>();
 
@@ -59,11 +82,29 @@ public class GameController : MonoBehaviour
 
         StartCoroutine(GameStart());
     }
+        
+    void MakePlayer()
+    {
+        player = GameObject.Find("Player");
+
+        Member1 member = player.AddComponent<Member1>();
+
+        member.SetCharacterInfo(DataManager.instance.characterList[DataManager.instance.currentCharacter], null);
+
+        CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
+        string characterName = leaderCharacter.name.Replace(" ", "");
+
+        System.Type componentType = System.Type.GetType(characterName);
+
+        if (componentType != null)
+        {
+            Component newComponent = player.AddComponent(componentType);
+        }
+    }
 
     IEnumerator GameStart()
     {
         isGameActive = false;
-        gameOverScreen.SetActive(false);
         //GetScore(0);
         //StartCoroutine(SpawnEnemy());
 
@@ -88,10 +129,14 @@ public class GameController : MonoBehaviour
     public void GameRestart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        player.transform.position = startPoint.transform.position;
+
     }
 
     public void GameOver()
     {
+        gameOverScreen.GameOverScreenOn();
+
         isGameActive = false;
         int score = DataManager.instance.currentScore;
         gameOverScoreText.text = score.ToString();
@@ -104,38 +149,6 @@ public class GameController : MonoBehaviour
         }
 
         highScoreText.text = DataManager.instance.GetHighScore().ToString();
-
-        StartCoroutine(GameOverScreenFadeIn());
-    }
-
-    IEnumerator SpawnEnemy()
-    {
-        float randomX, randomZ;
-        int randomIndex;
-        Vector3 spawnPos;
-        float playerDistance;
-
-        while(isGameActive)
-        {
-            yield return new WaitForSeconds(spawnTime / gameLevel);
-
-            do
-            {
-                randomX = Random.Range(-mapBound.x / 2, mapBound.x / 2);
-                randomZ = Random.Range(-mapBound.z / 2, mapBound.z / 2);
-                randomIndex = Random.Range(0, spawnPrefabs.Length);
-
-                spawnPos = new Vector3(randomX, 0, randomZ);
-
-                playerDistance = (player.transform.position - spawnPos).sqrMagnitude;
-
-                if (playerDistance >= spawnExceptRange)
-                {
-                    Instantiate(spawnPrefabs[randomIndex], spawnPos, spawnPrefabs[randomIndex].transform.rotation);
-                }
-
-            } while (playerDistance < spawnExceptRange);
-        }
     }
 
     public void SpawnEnemy(int enemyNum)
@@ -200,21 +213,4 @@ public class GameController : MonoBehaviour
         //Instantiate(prison, spawnPos, randomRotation);
     }
 
-    IEnumerator GameOverScreenFadeIn()
-    {
-        float fadeDuration = 3.0f;
-
-        CanvasGroup screenCanvasGroup = gameOverScreen.GetComponent<CanvasGroup>();
-        screenCanvasGroup.alpha = 0;
-        gameOverScreen.SetActive(true);
-        
-        float currentTime = 0;
-
-        while (currentTime < fadeDuration || screenCanvasGroup.alpha < 1)
-        {
-            screenCanvasGroup.alpha = currentTime / fadeDuration;
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-    }
 }

@@ -15,7 +15,7 @@ public class FarmerMan : Leader
 
     private void FarmerSkill()
     {
-        currentHp = maxHp;
-        healthBar.SetHealth(currentHp);
+        //currentHp = maxHp;
+        //healthBar.SetHealth(currentHp);
     }
 }

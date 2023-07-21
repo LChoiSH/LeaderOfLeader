@@ -16,11 +16,11 @@ public class BusinessMan : Leader
     private IEnumerator FarmerSkill()
     {
 
-        float currentAttackSpeed = attackSpeed;
-        attackSpeed /= 10;
+        //float currentAttackSpeed = attackSpeed;
+        //attackSpeed /= 10;
 
         yield return new WaitForSeconds(5.0f);
 
-        attackSpeed = currentAttackSpeed;
+        //attackSpeed = currentAttackSpeed;
     }
 }
