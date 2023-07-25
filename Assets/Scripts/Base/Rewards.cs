@@ -26,7 +26,7 @@ public class Rewards
 
     public static void AddMember()
     {
-        Debug.Log("AddMember");
+        MemberController.instance.AddMember();
     }
 
     public static void HealCharacters()

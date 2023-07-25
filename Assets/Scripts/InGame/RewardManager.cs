@@ -51,16 +51,18 @@ public class RewardManager : MonoBehaviour
             rectTransform.offsetMax = new Vector2(-50, positionY * i);
             rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, 200f);
 
-            TextMeshProUGUI nameText = button.GetComponentInChildren<TextMeshProUGUI>();
-            TextMeshProUGUI infoText = button.GetComponentInChildren<TextMeshProUGUI>();
+            TextMeshProUGUI[] texts = button.GetComponentsInChildren<TextMeshProUGUI>();
+
+            TextMeshProUGUI nameText = texts[0];
+            TextMeshProUGUI infoText = texts[1];
 
             RewardInfo rewardInfo = DataManager.instance.rewardList[UnityEngine.Random.Range(i, DataManager.instance.rewardList.Length)];
 
             button.onClick.AddListener(() => tempDo(rewardInfo.name));
-            button.onClick.AddListener(() => gameController.GameRestart());
+            button.onClick.AddListener(() => gameController.NextStage());
             button.onClick.AddListener(() => ScreenHide());
 
-            nameText.text = rewardInfo.name;
+            nameText.text = rewardInfo.title;
             infoText.text = rewardInfo.info;
         }
 

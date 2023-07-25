@@ -28,7 +28,7 @@ public class Missile : MonoBehaviour, Attackable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Prison"))
+        if (other.gameObject.CompareTag("Enemy"))
         {
             Attack(other.GetComponent<Damageable>());
         }

@@ -13,7 +13,7 @@ public class MemberController : MonoBehaviour
     {
         if(instance != null)
         {
-            DestroyImmediate(instance);
+            Destroy(gameObject);
             return ;
         } else
         {
@@ -49,11 +49,11 @@ public class MemberController : MonoBehaviour
 
     public void AddMember()
     {
-        Member1[] members = GetComponentsInChildren<Member1>();
+        Member[] members = GetComponentsInChildren<Member>();
 
         GameObject memberObject = new GameObject("Member");
         memberObject.transform.parent = transform;
-        Member1 member = memberObject.AddComponent<Member1>();
+        Member member = memberObject.AddComponent<Member>();
 
         GameObject followTarget = (members.Length == 0 ? player : members[members.Length - 1].gameObject);
 

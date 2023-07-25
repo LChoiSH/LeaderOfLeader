@@ -12,8 +12,13 @@ public class MainCamera : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null) { instance = this; }
-        else { return; }
+        if (instance == null) { 
+            instance = this; 
+        }
+        else { 
+            Destroy(gameObject);
+            return; 
+        }
 
         DontDestroyOnLoad(gameObject);
     }

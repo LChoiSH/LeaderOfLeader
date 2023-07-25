@@ -6,13 +6,12 @@ using UnityEngine;
 public class Member : MonoBehaviour, Damageable
 
 {
-    [SerializeField] bool isLoading = true;
+    bool isLoading = true;
 
     // move
     public GameObject followingTarget;
 
     // prefab
-    protected GameObject myPrefab;
     protected CharacterInfo myCharacterInfo;
     public GameController gameController;
 
@@ -21,7 +20,6 @@ public class Member : MonoBehaviour, Damageable
 
     // attack
     [SerializeField] protected float attackSpeed = 3.0f;
-    [SerializeField] Missile missile;
     private ObjectPool<Missile> missileObjectPool;
     private GameObject[] attackTargetArray;
     private float targetDistance, closestTargetDistance;
@@ -50,37 +48,49 @@ public class Member : MonoBehaviour, Damageable
     private void FixedUpdate()
     {
         if (isLoading) return;
-        if (!gameController.isGameActive) Die();
         Move();
     }
 
-    public void SetCharacterInfo (CharacterInfo characterInfo)
+    #nullable enable
+    public void SetCharacterInfo (CharacterInfo characterInfo, GameObject? followingTarget)
     {
-        myCharacterInfo= characterInfo;
+        Debug.Log(0);
 
-        maxHp = myCharacterInfo.hp;
-        currentHp = maxHp;
-        healthBar = gameObject.GetComponentInChildren<HealthBar>();
-        healthBar.SetMaxHealth(maxHp);
+        myCharacterInfo= characterInfo;
 
         attackSpeed = characterInfo.attackSpeed;
 
-        string characterPrefabName = DataManager.instance.characterDictionary[myCharacterInfo.id].prefab;
-        string characterPrefabPath = "Prefabs/Character/" + characterPrefabName;
-        myPrefab = Resources.Load<GameObject>(characterPrefabPath);
-        Instantiate(myPrefab, transform);
+        // Character Prefab Setting
+        string characterPrefabPath = "Prefabs/Character/" + DataManager.instance.characterDictionary[myCharacterInfo.id].prefab;
+        GameObject characterPrefab = Resources.Load<GameObject>(characterPrefabPath);
+        Instantiate(characterPrefab, transform);
 
-        string missilePrefabName = DataManager.instance.characterDictionary[myCharacterInfo.id].missilePrefab;
-        string missilePrefabPath = "Prefabs/Missile/" + missilePrefabName;
+        // Health Bar Setting
+        string healthBarPrefabPath = "Prefabs/HealthBar";
+        GameObject healthBarPrefab = Resources.Load<GameObject>(healthBarPrefabPath);
+        healthBar = Instantiate(healthBarPrefab, transform).GetComponentInChildren<HealthBar>();
 
-        missile = Resources.Load<GameObject>(missilePrefabPath).GetComponent<Missile>();
+        maxHp = myCharacterInfo.hp;
+        currentHp = maxHp;
+        healthBar.SetMaxHealth(maxHp);
+
+        // Missile Setting
+        string missilePrefabPath = "Prefabs/Missile/" + DataManager.instance.characterDictionary[myCharacterInfo.id].missilePrefab;
+        Missile missile = Resources.Load<GameObject>(missilePrefabPath).GetComponent<Missile>();
 
         missileObjectPool = new ObjectPool<Missile>(missile, 20);
 
+        // Animator Setting
         animator = GetComponentInChildren<Animator>();
         if (animator != null) animator.SetTrigger("TriggerRun");
 
         StartCoroutine(FireClosestTarget());
+
+        if(followingTarget != null)
+        {
+            this.followingTarget = followingTarget;
+            transform.position = this.followingTarget.transform.position;
+        }
 
         isLoading = false;
     }
@@ -95,15 +105,25 @@ public class Member : MonoBehaviour, Damageable
             StartCoroutine(SetInvincible(hitTime));
         }
 
-        if (currentHp <= 0) Die();
+        if (currentHp <= 0)
+        {
+            currentHp = 0;
+            animator.SetTrigger("TriggerDeath");
+            transform.parent = null;
+            Invoke("Die", 5.0f);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        missileObjectPool.DestroyPool();
     }
 
     protected virtual void Move()
     {
+        if (followingTarget == null) return;
         if (currentHp <= 0) return;
         
-        //transform.position = Vector3.Lerp(transform.position, followingTarget.transform.position, speed * Time.deltaTime);
-        //transform.LookAt(followingTarget.transform.position);
         StartCoroutine(FollowTarget());
     }
 
@@ -111,23 +131,15 @@ public class Member : MonoBehaviour, Damageable
     {
         Vector3 targetPosition = followingTarget.transform.position;
         Quaternion targetRotation = followingTarget.transform.rotation;
-        yield return new WaitForSeconds(2);
-        transform.position = Vector3.Lerp(transform.position, followingTarget.transform.position, speed * Time.deltaTime);
+        yield return new WaitForSeconds(0.5f);
+
+        transform.position = targetPosition;
         transform.rotation = targetRotation;
     }
 
     private void Die()
     {
-        currentHp = 0;
-        animator.SetTrigger("TriggerDeath");
-
-        Invoke("SetActiveFalse", 5f);
-        return;
-    }
-
-    private void SetActiveFalse()
-    {
-        transform.gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
     IEnumerator SetInvincible(float waitTime)
@@ -163,7 +175,6 @@ public class Member : MonoBehaviour, Damageable
             yield return new WaitForSeconds(attackSpeed);
 
             attackTargetArray = GameObject.FindGameObjectsWithTag("Enemy");
-            attackTargetArray.Concat(GameObject.FindGameObjectsWithTag("Prison")).ToArray();
 
             GameObject closestTarget = null;
             closestTargetDistance = Mathf.Infinity;

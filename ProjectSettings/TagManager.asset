@@ -7,9 +7,8 @@ TagManager:
   - Enemy
   - Bound
   - Member
-  - Prison
-  - Undefined
   - Missile
+  - Environment
   layers:
   - Default
   - TransparentFX
