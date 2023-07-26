@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 5142226831792695772}
   - component: {fileID: 5048520843935925535}
   - component: {fileID: 5048520843935925504}
-  - component: {fileID: 1135593693737396254}
+  - component: {fileID: 5045554309654743053}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Enemy
@@ -474,7 +474,7 @@ MonoBehaviour:
   maxHp: 100
   currentHp: 0
   healthBar: {fileID: 0}
---- !u!54 &1135593693737396254
+--- !u!54 &5045554309654743053
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -485,10 +485,10 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 4
   m_CollisionDetection: 0
 --- !u!1 &5047530133123273252
 GameObject:

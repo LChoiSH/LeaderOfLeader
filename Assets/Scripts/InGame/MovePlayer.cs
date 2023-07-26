@@ -8,16 +8,10 @@ using UnityEngine.UIElements;
 
 public class MovePlayer : MonoBehaviour
 {
-    public static Leader instance;
+    public Member member;
 
     // turn
     [SerializeField] float turnSpeed = 100.0f;
-
-    // bound
-    private Rigidbody selfRb;
-    public bool isCollide = false;
-    [SerializeField] float boundPower = 500.0f;
-
     protected float speed = 6.0f;
 
     // move
@@ -25,11 +19,15 @@ public class MovePlayer : MonoBehaviour
     private float inputAngle, subAngle;
     Vector3 turnDirection;
 
+    private void Awake()
+    {
+    }
+
     void Start()
     {
-        variableJoystick = GameObject.Find("Joystick").GetComponent<VariableJoystick>();
+        member = GetComponent<Member>();
 
-        selfRb = GetComponent<Rigidbody>();
+        variableJoystick = GameObject.Find("Joystick").GetComponent<VariableJoystick>();
     }
 
     private void FixedUpdate()
@@ -53,8 +51,7 @@ public class MovePlayer : MonoBehaviour
 
     void Move()
     {
-        if (isCollide) return;
-
+        if (member != null && member.GetCurrentHp() <= 0) return ;
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
         if (!GameController.instance.isGameActive) return;

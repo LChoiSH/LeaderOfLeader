@@ -24,7 +24,7 @@ public class EnemyManager : MonoBehaviour
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
         mapBound = mapSize;
 
-        SpawnEnemy(DataManager.instance.gameLevel);
+        SpawnEnemy(DataManager.instance.gameLevel * 2);
     }
 
     // Update is called once per frame
@@ -47,6 +47,7 @@ public class EnemyManager : MonoBehaviour
 
             spawnPos = new Vector3(randomX, 0, randomZ);
             GameObject spawnEnemy = Instantiate(spawnPrefabs[randomIndex], spawnPos, spawnPrefabs[randomIndex].transform.rotation);
+
             Enemy inputEnemy = spawnEnemy.GetComponent<Enemy>();
             inputEnemy.AddDieDelegate(RemoveEnemy);
 

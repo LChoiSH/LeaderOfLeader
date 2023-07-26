@@ -23,7 +23,7 @@ public class NextLevelDoor : MonoBehaviour
     {
         try
         {
-            if (other.gameObject.CompareTag("Player") || other.transform.parent.CompareTag("Player"))
+            if (other.gameObject.CompareTag("Member") || other.transform.parent.CompareTag("Member"))
             {
                 rewardManager.gameObject.SetActive(true);
                 rewardManager.RewardScreenIn();

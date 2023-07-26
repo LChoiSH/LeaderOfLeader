@@ -137,9 +137,21 @@ public class Enemy : MonoBehaviour, Attackable, Damageable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Member") || other.CompareTag("Player")) {
-            Attack(other.GetComponent<Damageable>());
+
+        try
+        {
+            if (other.gameObject.CompareTag("Member"))
+            {
+                Attack(other.GetComponent<Damageable>());
+            } else if (other.transform.parent != null && other.transform.parent.CompareTag("Member"))
+            {
+                Attack(other.GetComponentInParent<Damageable>());
+            }
+        } catch
+        {
+
         }
+        
     }
 
     public void Attack(Damageable damageable)
@@ -155,6 +167,7 @@ public class Enemy : MonoBehaviour, Attackable, Damageable
         if (currentHp <= 0)
         {
             SetState(EnemyState.Die);
+            gameObject.tag = "Untagged";
             animator.Play("Die", 0, 0f);
             Die();
         } else

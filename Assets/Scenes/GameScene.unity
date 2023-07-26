@@ -5146,7 +5146,7 @@ MonoBehaviour:
   isGameActive: 1
   isClear: 0
   isReward: 0
-  gameOverCanvas: {fileID: 0}
+  gameOverCanvas: {fileID: 1437578427}
   gameLevel: 1
   nextLevelDoor: {fileID: 0}
   startPoint: {fileID: 0}
@@ -5287,7 +5287,7 @@ Rigidbody:
   m_Drag: 100
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -5304,8 +5304,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnSpeed: 100
-  isCollide: 0
-  boundPower: 500
   variableJoystick: {fileID: 1575557204}
 --- !u!1 &1190396062
 GameObject:
@@ -8294,7 +8292,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1825390415}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -28}
+  m_LocalPosition: {x: 0, y: 0, z: -25.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

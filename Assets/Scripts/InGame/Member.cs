@@ -15,9 +15,6 @@ public class Member : MonoBehaviour, Damageable
     protected CharacterInfo myCharacterInfo;
     public GameController gameController;
 
-    // speed
-    [SerializeField]protected float speed = 6.0f;
-
     // attack
     [SerializeField] protected float attackSpeed = 3.0f;
     private ObjectPool<Missile> missileObjectPool;
@@ -54,8 +51,6 @@ public class Member : MonoBehaviour, Damageable
     #nullable enable
     public void SetCharacterInfo (CharacterInfo characterInfo, GameObject? followingTarget)
     {
-        Debug.Log(0);
-
         myCharacterInfo= characterInfo;
 
         attackSpeed = characterInfo.attackSpeed;
@@ -92,6 +87,8 @@ public class Member : MonoBehaviour, Damageable
             transform.position = this.followingTarget.transform.position;
         }
 
+        gameObject.tag = "Member";
+
         isLoading = false;
     }
 
@@ -110,7 +107,13 @@ public class Member : MonoBehaviour, Damageable
             currentHp = 0;
             animator.SetTrigger("TriggerDeath");
             transform.parent = null;
-            Invoke("Die", 5.0f);
+
+            if(GetComponent<MovePlayer>() != null) {
+                GameController.instance.GameOver();
+            } else
+            {
+                Invoke("Die", 5.0f);
+            }
         }
     }
 
@@ -199,4 +202,8 @@ public class Member : MonoBehaviour, Damageable
         }
     }
 
+    public int GetCurrentHp()
+    {
+        return currentHp;
+    }
 }

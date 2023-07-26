@@ -127,7 +127,16 @@ public class GameController : MonoBehaviour
 
     public void LevelUp()
     {
-        gameLevel++;
+        DataManager.instance.gameLevel += 100;
     }
 
+    public void GameSettingReset()
+    {
+        Destroy(player);
+        Destroy(MainCamera.instance.gameObject);
+        Destroy(MemberController.instance.gameObject);
+        Destroy(GameOverCanvas.instance.gameObject);
+        Destroy(GameCanvas.instance.gameObject);
+        Destroy(gameObject);
+    }
 }

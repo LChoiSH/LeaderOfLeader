@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GoToSelectCharacterButton : MonoBehaviour
+public class SelectCharacterButton : MonoBehaviour
 {
     Button sceneChangeButton;
 
@@ -17,6 +17,7 @@ public class GoToSelectCharacterButton : MonoBehaviour
 
     private void GoToCharacterSelectScene()
     {
+        GameController.instance.GameSettingReset();
         SceneManager.LoadScene("CharacterSelect");
     }
 }

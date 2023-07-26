@@ -50,7 +50,6 @@ public class CharacterWrap : MonoBehaviour
         DataManager.instance.currentCharacter = changeCharacterId;
 
         currentCharacter = changeCharacterId;
-        Debug.Log(changeCharacterId);
         characterLoc.x = -currentCharacter * characterDistance;
 
         infoBox.OpenBox(DataManager.instance.characterDictionary[changeCharacterId].info);
