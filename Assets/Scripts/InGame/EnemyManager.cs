@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class EnemyManager : MonoBehaviour
     public float spawnExceptRange = 10.0f;
     public GameObject[] spawnPrefabs;
     public TextMeshProUGUI scoreText;
+    public float spawnDistance = 10.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -24,13 +26,7 @@ public class EnemyManager : MonoBehaviour
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
         mapBound = mapSize;
 
-        SpawnEnemy(DataManager.instance.gameLevel * 2);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SpawnEnemy(GameController.instance.gameLevel * 2);
     }
 
     public void SpawnEnemy(int enemyNum)
@@ -38,6 +34,8 @@ public class EnemyManager : MonoBehaviour
         float randomX, randomZ;
         int randomIndex;
         Vector3 spawnPos;
+        float StartPointDistance;
+        Vector3 startPoint = GameObject.Find("StartPoint").transform.position;
 
         for (int i = 0; i < enemyNum; i++)
         {
@@ -46,6 +44,13 @@ public class EnemyManager : MonoBehaviour
             randomIndex = Random.Range(0, spawnPrefabs.Length);
 
             spawnPos = new Vector3(randomX, 0, randomZ);
+
+            if((startPoint - spawnPos).magnitude < spawnDistance)
+            {
+                i--;
+                continue;
+            } 
+
             GameObject spawnEnemy = Instantiate(spawnPrefabs[randomIndex], spawnPos, spawnPrefabs[randomIndex].transform.rotation);
 
             Enemy inputEnemy = spawnEnemy.GetComponent<Enemy>();
@@ -61,16 +66,7 @@ public class EnemyManager : MonoBehaviour
 
         if (enemies.Count == 0)
         {
-            DataManager.instance.gameLevel++;
-
-            GameController.instance.isClear = true;
-            GameController.instance.nextLevelDoor.LightOn();
+            GameController.instance.StageClear();
         }
-    }
-
-    public void GetScore(int value)
-    {
-        DataManager.instance.currentScore += value;
-        scoreText.text = DataManager.instance.currentScore.ToString();
     }
 }

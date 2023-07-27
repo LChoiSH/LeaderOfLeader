@@ -1,4 +1,5 @@
 using System.Collections;
+using System.ComponentModel;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,28 +10,33 @@ public class Member : MonoBehaviour, Damageable
     bool isLoading = true;
 
     // move
-    public GameObject followingTarget;
+    public Member followingTarget;
 
     // prefab
-    protected CharacterInfo myCharacterInfo;
+    CharacterInfo myCharacterInfo;
     public GameController gameController;
 
     // attack
-    [SerializeField] protected float attackSpeed = 3.0f;
+    [SerializeField] float attackSpeed = 3.0f;
     private ObjectPool<Missile> missileObjectPool;
     private GameObject[] attackTargetArray;
     private float targetDistance, closestTargetDistance;
-    private float attackRange = 50.0f; 
+    private float attackRange = 50.0f;
+
+    // damage
+    private int damage;
+    private int currentDamage;
 
     // damaged
-    protected int maxHp = 100;
-    protected int currentHp = 100;
-    private bool isDamaged = false;
-    private float hitTime = 1.5f;
-    protected HealthBar healthBar;
+    int maxHp = 100;
+    int currentHp = 100;
+    bool isDamaged = false;
+    float hitTime = 1.5f;
+    HealthBar healthBar;
+    int armor;
 
     // animation
-    protected Animator animator;
+    Animator animator;
 
     private void Awake()
     {
@@ -49,7 +55,7 @@ public class Member : MonoBehaviour, Damageable
     }
 
     #nullable enable
-    public void SetCharacterInfo (CharacterInfo characterInfo, GameObject? followingTarget)
+    public void SetCharacterInfo (CharacterInfo characterInfo, Member? followingTarget)
     {
         myCharacterInfo= characterInfo;
 
@@ -69,9 +75,17 @@ public class Member : MonoBehaviour, Damageable
         currentHp = maxHp;
         healthBar.SetMaxHealth(maxHp);
 
+        // defence Setting;
+        armor = 0;
+
+        // damage Setting
+        damage = characterInfo.attackDamage;
+        currentDamage = damage;
+
         // Missile Setting
         string missilePrefabPath = "Prefabs/Missile/" + DataManager.instance.characterDictionary[myCharacterInfo.id].missilePrefab;
         Missile missile = Resources.Load<GameObject>(missilePrefabPath).GetComponent<Missile>();
+        missile.SetAttacker(this);
 
         missileObjectPool = new ObjectPool<Missile>(missile, 20);
 
@@ -94,25 +108,30 @@ public class Member : MonoBehaviour, Damageable
 
     public virtual void Damaged(int damage)
     {
+        damage = Mathf.Clamp(damage - armor, 0, currentHp);
+
+
         if (!isDamaged)
         {
             currentHp -= damage;
             healthBar.SetHealth(currentHp);
             isDamaged = true;
             StartCoroutine(SetInvincible(hitTime));
-        }
 
-        if (currentHp <= 0)
-        {
-            currentHp = 0;
-            animator.SetTrigger("TriggerDeath");
-            transform.parent = null;
-
-            if(GetComponent<MovePlayer>() != null) {
-                GameController.instance.GameOver();
-            } else
+            if (currentHp <= 0)
             {
-                Invoke("Die", 5.0f);
+                currentHp = 0;
+                animator.SetTrigger("TriggerDeath");
+                transform.parent = null;
+
+                if (GetComponent<MovePlayer>() != null)
+                {
+                    GameController.instance.GameOver();
+                }
+                else
+                {
+                    Invoke("Die", 5.0f);
+                }
             }
         }
     }
@@ -132,6 +151,12 @@ public class Member : MonoBehaviour, Damageable
 
     IEnumerator FollowTarget()
     {
+        if(followingTarget.currentHp <= 0)
+        {
+            Damaged(999999);
+            yield break;
+        }
+
         Vector3 targetPosition = followingTarget.transform.position;
         Quaternion targetRotation = followingTarget.transform.rotation;
         yield return new WaitForSeconds(0.5f);
@@ -205,5 +230,31 @@ public class Member : MonoBehaviour, Damageable
     public int GetCurrentHp()
     {
         return currentHp;
+    }
+
+    public void AttackSpeedUp()
+    {
+        attackSpeed = attackSpeed * 0.9f;
+    }
+
+    public int GetDamage()
+    {
+        return currentDamage;
+    }
+
+    public void DamageUp(int x)
+    {
+        currentDamage += x;
+    }
+
+    public void DamageUp(float x) {
+        if (x <= 0) return;
+
+        currentDamage = currentDamage + (int)(damage * x);
+    }
+
+    public void ArmorUp(int x)
+    {
+        armor += x;
     }
 }

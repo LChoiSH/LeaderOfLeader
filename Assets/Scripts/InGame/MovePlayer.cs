@@ -12,7 +12,7 @@ public class MovePlayer : MonoBehaviour
 
     // turn
     [SerializeField] float turnSpeed = 100.0f;
-    protected float speed = 6.0f;
+    protected float speed = 4.0f;
 
     // move
     public VariableJoystick variableJoystick;

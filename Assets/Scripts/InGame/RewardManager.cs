@@ -35,8 +35,19 @@ public class RewardManager : MonoBehaviour
 
         float positionY = -200;
 
+        HashSet<int> madeRewards = new HashSet<int>();
+
         for(int i = 0;i < 3;i++)
         {
+            int randomRewardNum = UnityEngine.Random.Range(i, DataManager.instance.rewardList.Length);
+            if (!madeRewards.Add(randomRewardNum))
+            {
+                i--;
+                continue;
+            }
+
+            RewardInfo rewardInfo = DataManager.instance.rewardList[randomRewardNum];
+
             GameObject buttonGo = Instantiate(rewardButtonPrefab, rewardScreen.transform);
 
             buttonGo.SetActive(true);
@@ -56,9 +67,7 @@ public class RewardManager : MonoBehaviour
             TextMeshProUGUI nameText = texts[0];
             TextMeshProUGUI infoText = texts[1];
 
-            RewardInfo rewardInfo = DataManager.instance.rewardList[UnityEngine.Random.Range(i, DataManager.instance.rewardList.Length)];
-
-            button.onClick.AddListener(() => tempDo(rewardInfo.name));
+            button.onClick.AddListener(() => ReflectRewards(rewardInfo.name));
             button.onClick.AddListener(() => gameController.NextStage());
             button.onClick.AddListener(() => ScreenHide());
 
@@ -69,7 +78,7 @@ public class RewardManager : MonoBehaviour
         ScreenShow();
     }
 
-    void tempDo(string methodName)
+    void ReflectRewards(string methodName)
     {
         // 메서드를 가져올 타입
         System.Type targetType = typeof(Rewards);
@@ -88,11 +97,6 @@ public class RewardManager : MonoBehaviour
         }
     }
 
-    public void RewardScreenOut()
-    {
-        StartCoroutine(RewardScreenFadeOut());
-    }
-
     void ScreenShow()
     {
         gameObject.SetActive(true);
@@ -103,42 +107,5 @@ public class RewardManager : MonoBehaviour
     {
         Time.timeScale = 1;
         gameObject.SetActive(false);
-    }
-
-    IEnumerator RewardScreenFadeIn()
-    {
-        float fadeDuration = 3.0f;
-
-        CanvasGroup screenCanvasGroup = rewardScreen.GetComponent<CanvasGroup>();
-        screenCanvasGroup.alpha = 0;
-        rewardScreen.SetActive(true);
-
-        float currentTime = 0;
-
-        while (currentTime < fadeDuration || screenCanvasGroup.alpha < 1)
-        {
-            screenCanvasGroup.alpha = currentTime / fadeDuration;
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    IEnumerator RewardScreenFadeOut()
-    {
-        float fadeDuration = 3.0f;
-
-        CanvasGroup screenCanvasGroup = rewardScreen.GetComponent<CanvasGroup>();
-        screenCanvasGroup.alpha = 0;
-
-        float currentTime = 0;
-
-        while (currentTime < fadeDuration || screenCanvasGroup.alpha > 0)
-        {
-            screenCanvasGroup.alpha = (fadeDuration - currentTime) / fadeDuration;
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-
-        rewardScreen.SetActive(false);
     }
 }

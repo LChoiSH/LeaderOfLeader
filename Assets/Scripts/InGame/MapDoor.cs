@@ -15,7 +15,7 @@ public class MapDoor : MonoBehaviour
         if (!GameController.instance.isClear)
         {
             if (!isInDoor) return;
-            if (transform.position.x < -2)
+            if (transform.position.x < 0)
             {
                 transform.Translate(Vector3.right * doorSpeed * Time.deltaTime);
             }
@@ -23,7 +23,7 @@ public class MapDoor : MonoBehaviour
         else
         {
             if (isInDoor) return;
-            if (transform.position.x > -8.5)
+            if (transform.position.x > -7)
             {
                 transform.Translate(Vector3.left * doorSpeed * Time.deltaTime);
             }

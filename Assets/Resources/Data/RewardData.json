@@ -1,19 +1,29 @@
 {
-    "rewardList": [
-        {
-            "name": "AddMember",
-            "title": "멤버 영입",
-            "info": "무작위 멤버를 영입합니다."
-        },
-        {
-            "name": "HealCharacters",
-            "title": "캐릭터 회복",
-            "info": "모든 캐릭터의 체력을 회복합니다."
-        },
-        {
-            "name": "CancelReward",
-            "title": "리워드 캔슬",
-            "info": "테스트용 입니다."
-        }
-    ]
+  "rewardList": [
+    {
+      "name": "AddMember",
+      "title": "멤버 영입",
+      "info": "무작위 멤버를 영입합니다."
+    },
+    {
+      "name": "HealCharacters",
+      "title": "캐릭터 회복",
+      "info": "모든 캐릭터의 체력을 회복합니다."
+    },
+    {
+      "name": "AddDamage",
+      "title": "공격력 증가",
+      "info": "캐릭터들의 공격력을 증가합니다."
+    },
+    {
+      "name": "AddArmor",
+      "title": "방어력 증가",
+      "info": "캐릭터들의 방어력을 증가합니다."
+    },
+    {
+      "name": "AddAttackSpeed",
+      "title": "공격속도 증가",
+      "info": "캐릭터들의 공격속도를 증가합니다."
+    }
+  ]
 }

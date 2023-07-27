@@ -7,7 +7,7 @@ using UnityEngine;
 public class MemberController : MonoBehaviour
 {
     public static MemberController instance;
-    public GameObject player;
+    public static Vector3 hidePosition = new Vector3(0, -20, 0);
 
     private void Awake()
     {
@@ -23,30 +23,6 @@ public class MemberController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        player = GameObject.Find("Player");
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            AddMember();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if(Time.timeScale == 0)
-            {
-                Time.timeScale = 1;
-            } else
-            {
-                Time.timeScale = 0;
-            }
-        }
-    }
-
     public void AddMember()
     {
         Member[] members = GetComponentsInChildren<Member>();
@@ -54,9 +30,26 @@ public class MemberController : MonoBehaviour
         GameObject memberObject = new GameObject("Member");
         memberObject.transform.parent = transform;
         Member member = memberObject.AddComponent<Member>();
-
-        GameObject followTarget = (members.Length == 0 ? player : members[members.Length - 1].gameObject);
+        member.transform.position = hidePosition;
+        Member followTarget = (members.Length == 0 ? GameObject.Find("Player").GetComponent<Member>() : members[members.Length - 1]);
 
         member.SetCharacterInfo(DataManager.instance.characterList[Random.Range(0, DataManager.instance.characterList.Length)], followTarget);
+    }
+
+    public List<Member> GetMembers()
+    {
+        List<Member> members = GetComponentsInChildren<Member>().ToList();
+
+        return members;
+    }
+
+    public void MemberHide()
+    {
+        Member[] members = GetComponentsInChildren<Member>();
+        
+        foreach (Member member in members)
+        {
+            member.transform.position = hidePosition;
+        }
     }
 }

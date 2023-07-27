@@ -1,28 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
-
-enum RewardEnum { InputMember, HealCharacters, c };
 
 public class Rewards
 {
     string[] rewardsList;
-
-    // Start is called before the first frame update
-    //void Start()
-    //{
-    //    rewardsList = Enum.GetNames(typeof(RewardEnum));
-    //}
-
-    //void RandomRewards()
-    //{
-    //    while(true)
-    //    {
-    //        int randomIndex = UnityEngine.Random.Range(0, rewardsList.Length);
-    //        Invoke(rewardsList[randomIndex], 0);
-    //    }
-    //}
 
     public static void AddMember()
     {
@@ -34,8 +19,33 @@ public class Rewards
         Debug.Log("HealCharacters");
     }
 
-    public static void CancelReward()
+    public static void AddDamage()
     {
-        Debug.Log("CancelReward");
+        List<Member> members = MemberController.instance.GetMembers();
+
+        foreach(Member member in members)
+        {
+            member.DamageUp(20);
+        }
+    }
+
+    public static void AddArmor()
+    {
+        List<Member> members = MemberController.instance.GetMembers();
+
+        foreach (Member member in members)
+        {
+            member.ArmorUp(10);
+        }
+    }
+
+    public static void AddAttackSpeed()
+    {
+        List<Member> members = MemberController.instance.GetMembers();
+
+        foreach (Member member in members)
+        {
+            member.AttackSpeedUp();
+        }
     }
 }

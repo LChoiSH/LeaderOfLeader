@@ -9,10 +9,8 @@ public class DataManager : MonoBehaviour
     public RewardInfo[] rewardList;
     public Dictionary<int, CharacterInfo> characterDictionary = new Dictionary<int, CharacterInfo>();
     public bool isLoading = false;
-    public int currentScore = 0;
     private int highScore;
     public int currentCharacter { get; set; }
-    public int gameLevel { get; set; }
 
     private void Awake()
     {
@@ -29,8 +27,6 @@ public class DataManager : MonoBehaviour
         GetCharacterData();
         GetRewardData();
         highScore = PlayerPrefs.GetInt("highScore");
-        gameLevel = 1;
-
         isLoading = false;
     }
 

@@ -35,7 +35,7 @@ public class GameOverCanvas : MonoBehaviour
 
     public void GameOverScreenOn()
     {
-        int score = DataManager.instance.currentScore;
+        int score = GameController.instance.gameScore;
         gameOverScoreText.text = score.ToString();
 
         int highScore = DataManager.instance.GetHighScore();

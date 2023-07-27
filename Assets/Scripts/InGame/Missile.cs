@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Missile : MonoBehaviour, Attackable
 {
+    public Member attacker;
+
     float flyingTime = 5.0f;
 
     public float speed = 10.0f;
     [SerializeField] ParticleSystem particle;
-    [SerializeField] int damage = 100;
 
     private void Awake()
     {
@@ -37,7 +38,12 @@ public class Missile : MonoBehaviour, Attackable
     public void Attack(Damageable damageable)
     {
         Instantiate(particle, transform.position, transform.rotation);
-        damageable.Damaged(damage);
+
+        if(attacker != null)
+        {
+            damageable.Damaged(attacker.GetDamage());
+        }
+
         gameObject.SetActive(false);
     }
 
@@ -45,5 +51,10 @@ public class Missile : MonoBehaviour, Attackable
     {
         yield return new WaitForSeconds(flyingTime);
         transform.gameObject.SetActive(false);
+    }
+
+    public void SetAttacker(Member member)
+    {
+        attacker = member;
     }
 }

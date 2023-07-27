@@ -23,6 +23,9 @@ public class GameController : MonoBehaviour
     public int gameLevel = 1;
     public NextLevelDoor nextLevelDoor;
 
+    // Game Score
+    public int gameScore = 0;
+
     // player
     private GameObject player;
     [SerializeField] private GameObject startPoint;
@@ -74,6 +77,14 @@ public class GameController : MonoBehaviour
         player.transform.position = startPoint.transform.position;
         player.transform.rotation = startPoint.transform.rotation;
 
+        List<Member> members = MemberController.instance.GetMembers();
+
+        foreach (Member member in members)
+        {
+            member.transform.position = startPoint.transform.position;
+            member.transform.rotation = startPoint.transform.rotation;
+        }
+
         nextLevelDoor = GameObject.Find("Next Level").GetComponent<NextLevelDoor>();
 
         isClear = false;
@@ -81,6 +92,8 @@ public class GameController : MonoBehaviour
 
         GameObject floor = GameObject.Find("Floor");
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
+
+        GameCanvas.instance.SettinLevelText(gameLevel);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -101,7 +114,6 @@ public class GameController : MonoBehaviour
             yield return null;
         }
 
-        LevelUp();
         StartCoroutine(GameStart());
     }
 
@@ -122,12 +134,15 @@ public class GameController : MonoBehaviour
 
     public void GetScore(int value)
     {
-        DataManager.instance.currentScore += value;
+        gameScore += value;
+        GameCanvas.instance.SettinScoreText(gameScore);
     }
 
-    public void LevelUp()
+    public void StageClear()
     {
-        DataManager.instance.gameLevel += 100;
+        isClear = true;
+        nextLevelDoor.LightOn();
+        gameLevel++;
     }
 
     public void GameSettingReset()
