@@ -4,23 +4,28 @@ using UnityEngine;
 
 public class BusinessMan : Leader
 {
-    public override void DoSkill()
+    protected override void Skill()
     {
-        if (currentSkillTime > 0) return;
-
-        base.DoSkill();
-
-        StartCoroutine(FarmerSkill());
+        Debug.Log("Business Man Skill");
     }
 
-    private IEnumerator FarmerSkill()
-    {
+    //public override void DoSkill()
+    //{
+    //    if (currentSkillTime > 0) return;
 
-        //float currentAttackSpeed = attackSpeed;
-        //attackSpeed /= 10;
+    //    base.DoSkill();
 
-        yield return new WaitForSeconds(5.0f);
+    //    StartCoroutine(FarmerSkill());
+    //}
 
-        //attackSpeed = currentAttackSpeed;
-    }
+    //private IEnumerator FarmerSkill()
+    //{
+
+    //    //float currentAttackSpeed = attackSpeed;
+    //    //attackSpeed /= 10;
+
+    //    yield return new WaitForSeconds(5.0f);
+
+    //    //attackSpeed = currentAttackSpeed;
+    //}
 }

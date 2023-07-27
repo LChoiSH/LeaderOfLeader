@@ -446,6 +446,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1505616302}
   levelText: {fileID: 970954752}
+  leader: {fileID: 0}
+  skillTimeText: {fileID: 1411430712}
+  skillTimeImage: {fileID: 580353229}
+  skillImage: {fileID: 933874501}
 --- !u!114 &132485692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7586,7 +7590,7 @@ GameObject:
   - component: {fileID: 1760000736}
   - component: {fileID: 1760000735}
   m_Layer: 5
-  m_Name: Active Skill Button
+  m_Name: Skill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

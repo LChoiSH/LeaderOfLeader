@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameCanvas : MonoBehaviour
 {
@@ -9,6 +10,12 @@ public class GameCanvas : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI levelText;
+
+    public Leader leader;
+
+    public TextMeshProUGUI skillTimeText;
+    public Image skillTimeImage;
+    public RawImage skillImage;
 
     private void Awake()
     {
@@ -23,16 +30,37 @@ public class GameCanvas : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        //player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SettingLeader(Leader leader)
     {
-        
+        this.leader = leader;
+    }
+
+    public void SettingSkillImage(Texture2D imageTexture)
+    {
+        skillImage.texture = imageTexture;
+    }
+
+    private void Update()
+    {
+        showSkillTime();
+    }
+
+    private void showSkillTime()
+    {
+        skillTimeImage.fillAmount = leader.currentSkillTime / leader.skillTime;
+
+        if(skillTimeImage.fillAmount > 0)
+        {
+            skillTimeText.text = Mathf.Ceil(leader.currentSkillTime).ToString();
+        } else
+        {
+            skillTimeText.text = "";
+        }
     }
 
     public void SettinScoreText(int value)

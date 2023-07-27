@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class MadMan : Leader
 {
-    public override void DoSkill()
+    MovePlayer movePlayer;
+    ParticleSystem madRunParticle;
+
+    void Start()
     {
-        if (currentSkillTime > 0) return;
+        movePlayer= GetComponent<MovePlayer>();
 
-        base.DoSkill();
-
-        StartCoroutine(MadSkill());
+        string runParticlePath = "Prefabs/Particle/FX_MadRun";
+        GameObject runParticlePrefab = Resources.Load<GameObject>(runParticlePath);
+        madRunParticle = Instantiate(runParticlePrefab, transform).GetComponent<ParticleSystem>();
+        madRunParticle.Stop();
     }
 
-    private IEnumerator MadSkill()
+    protected override void Skill()
     {
-        float currentSpeed = speed;
-        speed *= 3;
+        StartCoroutine(MadRun());
+    }
 
-        yield return new WaitForSeconds(3.0f);
-
-        speed = currentSpeed;
+    IEnumerator MadRun()
+    {
+        madRunParticle.Play();
+        movePlayer.speed *= 2;
+        yield return new WaitForSeconds(3);
+        movePlayer.speed /= 2;
+        madRunParticle.Stop();
     }
 }

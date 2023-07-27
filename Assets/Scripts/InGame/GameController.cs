@@ -68,7 +68,13 @@ public class GameController : MonoBehaviour
         if (componentType != null)
         {
             Component newComponent = player.AddComponent(componentType);
+            GameCanvas.instance.SettingLeader(player.GetComponent<Leader>());
         }
+
+        // skill Image Setting
+        string skillImagePath = "Image/Skill/" + leaderCharacter.skillImage;
+        Texture2D imageTexture = Resources.Load<Texture2D>(skillImagePath);
+        GameCanvas.instance.SettingSkillImage(imageTexture);
     }
 
     IEnumerator GameStart()

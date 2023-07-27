@@ -5,69 +5,44 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Leader : MonoBehaviour
+public abstract class Leader : MonoBehaviour
 {
-    public static Leader instance;
-
-    // turn
-    [SerializeField] float turnSpeed = 100.0f;
-
-    [SerializeField] float boundPower = 500.0f;
-
-    protected float speed = 6.0f;
-
     // active Skill
-    public Button activeSkillButton;
-    public GameObject skillTimeTextWrap;
-    public RawImage skillImage;
-    public TMP_Text skillTimeText;
     public float skillTime = 10.0f;
     public float currentSkillTime = 0;
 
-    private void Awake()
-    {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else
-        {
-            instance = this;
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
-
-     void Start()
+    void Start()
     {
         CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
+        if(currentSkillTime <= 0)
+        {
+            DoSKill();
+        }
     }
 
-    public virtual void DoSkill()
+    protected abstract void Skill();
+
+    protected virtual void DoSKill()
     {
         if (currentSkillTime > 0) return;
 
         StartCoroutine(SkillTimeCheck());
+        Skill();
     }
 
-    private IEnumerator SkillTimeCheck()
+    IEnumerator SkillTimeCheck()
     {
-        skillTimeTextWrap.SetActive(true);
         currentSkillTime = skillTime;
-        skillTimeText.text = currentSkillTime.ToString();
 
         while (currentSkillTime > 0)
         {
-            yield return new WaitForSeconds(1);
-            currentSkillTime -= 1;
-            skillTimeText.text = currentSkillTime.ToString();
+            currentSkillTime -= (Time.deltaTime);
+            Mathf.Clamp(currentSkillTime, 0, skillTime);
+            yield return null;
         }
-
-        skillTimeTextWrap.SetActive(false);
     }
 }

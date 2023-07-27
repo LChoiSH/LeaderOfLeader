@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class FarmerMan : Leader
 {
-    public override void DoSkill()
+
+    protected override void Skill()
     {
-        if (currentSkillTime > 0) return;
+        Debug.Log("Farmer Man Skill");
+    }
+    //public void DoSkill()
+    //{
+    //    if (currentSkillTime > 0) return;
         
-        base.DoSkill();
+    //    base.DoSkill();
 
-        FarmerSkill();
-    }
+    //}
 
-    private void FarmerSkill()
-    {
-        //currentHp = maxHp;
-        //healthBar.SetHealth(currentHp);
-    }
 }

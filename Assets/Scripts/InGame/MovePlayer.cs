@@ -8,11 +8,13 @@ using UnityEngine.UIElements;
 
 public class MovePlayer : MonoBehaviour
 {
+    public static MovePlayer instance;
+
     public Member member;
 
     // turn
     [SerializeField] float turnSpeed = 100.0f;
-    protected float speed = 4.0f;
+    public float speed = 4.0f;
 
     // move
     public VariableJoystick variableJoystick;
@@ -21,6 +23,16 @@ public class MovePlayer : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+
+        DontDestroyOnLoad(this);
     }
 
     void Start()
