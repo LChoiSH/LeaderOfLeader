@@ -14,35 +14,28 @@ public abstract class Leader : MonoBehaviour
     void Start()
     {
         CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
+        skillTime = leaderCharacter.skillTime;
     }
 
     private void Update()
     {
-        if(currentSkillTime <= 0)
-        {
-            DoSKill();
-        }
+        DoSKill();
     }
 
     protected abstract void Skill();
 
-    protected virtual void DoSKill()
+    protected void DoSKill()
     {
-        if (currentSkillTime > 0) return;
+        if (!GameController.instance.isGameActive) return;
 
-        StartCoroutine(SkillTimeCheck());
-        Skill();
-    }
-
-    IEnumerator SkillTimeCheck()
-    {
-        currentSkillTime = skillTime;
-
-        while (currentSkillTime > 0)
+        if (currentSkillTime <= 0)
         {
-            currentSkillTime -= (Time.deltaTime);
-            Mathf.Clamp(currentSkillTime, 0, skillTime);
-            yield return null;
+            currentSkillTime = skillTime;
+            Skill();
+        }
+        else
+        {
+            currentSkillTime -= Time.deltaTime;
         }
     }
 }

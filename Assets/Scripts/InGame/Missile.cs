@@ -37,9 +37,12 @@ public class Missile : MonoBehaviour, Attackable
 
     public void Attack(Damageable damageable)
     {
-        Instantiate(particle, transform.position, transform.rotation);
+        if(particle != null)
+        {
+            Instantiate(particle, transform.position, transform.rotation);
+        }
 
-        if(attacker != null)
+        if (attacker != null)
         {
             damageable.Damaged(attacker.GetDamage());
         }

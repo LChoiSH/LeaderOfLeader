@@ -45,7 +45,7 @@ public class Rewards
 
         foreach (Member member in members)
         {
-            member.AttackSpeedUp();
+            member.AttackSpeedUp(20);
         }
     }
 }

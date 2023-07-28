@@ -45,7 +45,7 @@ public class GameCanvas : MonoBehaviour
         skillImage.texture = imageTexture;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         showSkillTime();
     }

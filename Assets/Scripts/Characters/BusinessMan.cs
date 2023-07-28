@@ -4,28 +4,42 @@ using UnityEngine;
 
 public class BusinessMan : Leader
 {
-    protected override void Skill()
+    Member member;
+    BoxCollider selfCollider;
+    ParticleSystem fireParticle;
+
+    void Start()
     {
-        Debug.Log("Business Man Skill");
+        member = GetComponent<Member>();
+
+        string fireParticlePath = "Prefabs/Particle/FX_BusinessFire";
+        GameObject fireParticlePrefab = Resources.Load<GameObject>(fireParticlePath);
+        fireParticle = Instantiate(fireParticlePrefab, transform).GetComponent<ParticleSystem>();
+        fireParticle.Stop();
+        fireParticle.Stop(false, ParticleSystemStopBehavior.StopEmitting);
     }
 
-    //public override void DoSkill()
-    //{
-    //    if (currentSkillTime > 0) return;
+    protected override void Skill()
+    {
+        BoxCollider selfCollider = GetComponentInChildren<BoxCollider>();
+        float height = selfCollider.size.y;
+        fireParticle.transform.localPosition = new Vector3(0, height, 0);
+        StartCoroutine(BusinessFire());
+    }
 
-    //    base.DoSkill();
+    IEnumerator BusinessFire()
+    {
+        fireParticle.Play();
+        member.AttackSpeedUp(200);
 
-    //    StartCoroutine(FarmerSkill());
-    //}
+        float currentTime = 0;
+        while(currentTime < 5)
+        {
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+        member.AttackSpeedUp(-200);
+        fireParticle.Stop(false, ParticleSystemStopBehavior.StopEmitting);
 
-    //private IEnumerator FarmerSkill()
-    //{
-
-    //    //float currentAttackSpeed = attackSpeed;
-    //    //attackSpeed /= 10;
-
-    //    yield return new WaitForSeconds(5.0f);
-
-    //    //attackSpeed = currentAttackSpeed;
-    //}
+    }
 }

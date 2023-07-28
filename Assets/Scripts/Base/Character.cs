@@ -12,6 +12,7 @@ public class CharacterInfo
     public string prefab;
     public string missilePrefab;
     public string skillImage;
+    public float skillTime;
     public int hp;
     public string speed;
     public float attackSpeed;

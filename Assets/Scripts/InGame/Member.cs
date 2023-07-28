@@ -17,7 +17,10 @@ public class Member : MonoBehaviour, Damageable
     public GameController gameController;
 
     // attack
-    [SerializeField] float attackSpeed = 3.0f;
+    [SerializeField] float attackSpeed;
+    [SerializeField] float currentAttackSpeed;
+    [SerializeField] float attackTime;
+    [SerializeField] float attackDelayTime;
     private ObjectPool<Missile> missileObjectPool;
     private GameObject[] attackTargetArray;
     private float targetDistance, closestTargetDistance;
@@ -59,7 +62,11 @@ public class Member : MonoBehaviour, Damageable
     {
         myCharacterInfo= characterInfo;
 
+        // attack Speed Setting
         attackSpeed = characterInfo.attackSpeed;
+        currentAttackSpeed = attackSpeed;
+        attackTime = 100 / attackSpeed;
+        attackDelayTime = 0;
 
         // Character Prefab Setting
         string characterPrefabPath = "Prefabs/Character/" + DataManager.instance.characterDictionary[myCharacterInfo.id].prefab;
@@ -200,7 +207,13 @@ public class Member : MonoBehaviour, Damageable
     {
         while (currentHp > 0)
         {
-            yield return new WaitForSeconds(attackSpeed);
+            attackDelayTime += Time.deltaTime;
+            if (attackTime > attackDelayTime)
+            {
+                yield return null;
+                continue;
+            }
+            attackDelayTime = 0;
 
             attackTargetArray = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -232,9 +245,17 @@ public class Member : MonoBehaviour, Damageable
         return currentHp;
     }
 
-    public void AttackSpeedUp()
+    public void AttackSpeedUp(float value)
     {
-        attackSpeed = attackSpeed * 0.9f;
+        currentAttackSpeed += value;
+
+        if(currentAttackSpeed <= 0)
+        {
+            attackTime = float.MaxValue;
+        } else
+        {
+            attackTime = 100 / currentAttackSpeed;
+        }
     }
 
     public int GetDamage()
@@ -242,9 +263,9 @@ public class Member : MonoBehaviour, Damageable
         return currentDamage;
     }
 
-    public void DamageUp(int x)
+    public void DamageUp(int value)
     {
-        currentDamage += x;
+        currentDamage += value;
     }
 
     public void DamageUp(float x) {
