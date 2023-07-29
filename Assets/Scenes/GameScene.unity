@@ -5172,6 +5172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   member: {fileID: 0}
   turnSpeed: 100
+  speed: 4
   variableJoystick: {fileID: 1575557204}
 --- !u!1 &1190396062
 GameObject:

@@ -61,8 +61,6 @@ public class DataManager : MonoBehaviour
         {
             rewardDictionary.Add(i, rewardList[i]);
         }
-
-        Debug.Log(rewardList[0].info);
     }
 
     public int GetHighScore() { return highScore; }

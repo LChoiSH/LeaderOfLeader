@@ -19,11 +19,11 @@
       "prefab": "Farmer Man",
       "missilePrefab": "CarrotMissile",
       "skillImage": "farmer_man_skill",
-      "skillTime": 12,
+      "skillTime": 3,
       "hp": 60,
       "speed": 10,
       "attackSpeed": 100,
-      "attackDamage": 80,
+      "attackDamage": 60,
       "info": "순박한 농부입니다. 투쟁심은 다소 떨어지지만, 노동을 위해서 휴식과 회복이 얼마나 중요한지 알고 있습니다."
     },
     {

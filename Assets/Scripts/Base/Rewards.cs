@@ -16,7 +16,12 @@ public class Rewards
 
     public static void HealCharacters()
     {
-        Debug.Log("HealCharacters");
+        List<Member> members = MemberController.instance.GetMembers();
+
+        foreach (Member member in members)
+        {
+            member.RecoveryHp(10000);
+        }
     }
 
     public static void AddDamage()

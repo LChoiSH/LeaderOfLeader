@@ -11,10 +11,13 @@ public abstract class Leader : MonoBehaviour
     public float skillTime = 10.0f;
     public float currentSkillTime = 0;
 
-    void Start()
+    protected virtual void Start()
     {
+        Debug.Log("leader start");
         CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
         skillTime = leaderCharacter.skillTime;
+
+        Debug.Log(leaderCharacter.name + " " + leaderCharacter.skillTime);
     }
 
     private void Update()
@@ -28,7 +31,7 @@ public abstract class Leader : MonoBehaviour
     {
         if (!GameController.instance.isGameActive) return;
 
-        if (currentSkillTime <= 0)
+        if (currentSkillTime <= 0 && !GameController.instance.isClear)
         {
             currentSkillTime = skillTime;
             Skill();

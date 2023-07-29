@@ -7,9 +7,11 @@ public class MadMan : Leader
     MovePlayer movePlayer;
     ParticleSystem madRunParticle;
 
-    void Start()
+    protected override void Start()
     {
-        movePlayer= GetComponent<MovePlayer>();
+        base.Start();
+
+        movePlayer = GetComponent<MovePlayer>();
 
         string runParticlePath = "Prefabs/Particle/FX_MadRun";
         GameObject runParticlePrefab = Resources.Load<GameObject>(runParticlePath);

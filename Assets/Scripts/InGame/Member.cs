@@ -179,7 +179,6 @@ public class Member : MonoBehaviour, Damageable
 
     IEnumerator SetInvincible(float waitTime)
     {
-
         Renderer[] childrenRenderer = transform.GetComponentsInChildren<Renderer>();
 
         foreach (Renderer rend in childrenRenderer)
@@ -243,6 +242,14 @@ public class Member : MonoBehaviour, Damageable
     public int GetCurrentHp()
     {
         return currentHp;
+    }
+
+    public void RecoveryHp(int value)
+    {
+        currentHp += value;
+        if (currentHp > maxHp) currentHp = maxHp;
+
+        healthBar.SetHealth(currentHp);
     }
 
     public void AttackSpeedUp(float value)

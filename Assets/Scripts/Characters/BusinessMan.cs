@@ -8,8 +8,10 @@ public class BusinessMan : Leader
     BoxCollider selfCollider;
     ParticleSystem fireParticle;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         member = GetComponent<Member>();
 
         string fireParticlePath = "Prefabs/Particle/FX_BusinessFire";
