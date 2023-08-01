@@ -135,7 +135,7 @@ public class GameController : MonoBehaviour
     {
         isGameActive = false;
 
-        gameOverCanvas.GameOverScreenOn();
+        GameOverCanvas.instance.GameOverScreenOn();
     }
 
     public void GetScore(int value)

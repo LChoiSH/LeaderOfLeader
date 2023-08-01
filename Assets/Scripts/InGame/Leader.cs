@@ -29,7 +29,7 @@ public abstract class Leader : MonoBehaviour
 
     protected void DoSKill()
     {
-        if (!GameController.instance.isGameActive) return;
+        if (!GameController.instance.isGameActive || GameController.instance.isClear) return;
 
         if (currentSkillTime <= 0 && !GameController.instance.isClear)
         {

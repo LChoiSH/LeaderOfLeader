@@ -216,7 +216,7 @@ public class Member : MonoBehaviour, Damageable
 
             attackTargetArray = GameObject.FindGameObjectsWithTag("Enemy");
 
-            GameObject closestTarget = null;
+            GameObject? closestTarget = null;
             closestTargetDistance = Mathf.Infinity;
 
             foreach (GameObject target in attackTargetArray)

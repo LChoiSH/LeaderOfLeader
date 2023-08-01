@@ -3,160 +3,153 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.NCalc;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Android;
+using UnityEngine.SocialPlatforms.Impl;
 
-public enum EnemyState
+abstract public class Enemy : MonoBehaviour, Damageable, Attackable
 {
-    Idle,
-    Move,
-    Attack,
-    Hit,
-    Die
-}
+    protected enum EnemyState
+    {
+        Idle,
+        Move,
+        Attack,
+        Hit,
+        Die
+    }
 
-public class Enemy : MonoBehaviour, Attackable, Damageable
-{
-    // Enemy FSM
-    [SerializeField] private EnemyState currentState;
+    [SerializeField] EnemyState currentState;
 
-    private GameObject target;
-    public float speed = 1.0f;
-    public int damage = 1;
-    [SerializeField] int score = 1;
-    GameController gameController;
-    Rigidbody selfRb;
-    BoxCollider selfCollder;
-
-    // chase
-    private float distance;
-    [SerializeField] private float chaseDistance = 40.0f;
-
-    // attack
-    [SerializeField] private float attackDistance = 5.0f;
-
-    // animation
+    protected Collider selfCollder;
+    protected Rigidbody selfRb;
     protected Animator animator;
 
-    // damaged
-    [SerializeField] int maxHp = 100;
-    [SerializeField] private int currentHp;
-    public HealthBar healthBar;
+    // move
+    public float speed;
+    float distance = float.MaxValue;
+    public float chaseDistance;
 
-    // delegate at die
+    // attack
+    public float attackDistance;
+    public int damage;
+    [SerializeField] public GameObject target;
+    protected float attackTime;
+    protected float attackDelayTime;
+    public float attackSpeed;
+
+    // damaged
+    public int maxHp = 100;
+    int currentHp;
+    HealthBar healthBar;
+
+    // die
+    public int score;
     public delegate void DieDelegate(GameObject x);
     DieDelegate dieDelegate;
 
-    void Start()
+    virtual protected void Start()
     {
-        gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
-        currentState = EnemyState.Idle;
+        SetState(EnemyState.Idle);
         target = GameObject.Find("Player");
 
-        animator = GetComponentInChildren<Animator>();
-        if (animator != null) animator.SetFloat("moveSpeed", 0);
+        attackTime = 100 / attackSpeed;
+        attackDelayTime = attackTime;
 
-        healthBar = gameObject.GetComponentInChildren<HealthBar>();
-        healthBar.SetMaxHealth(maxHp);
+        animator = GetComponentInChildren<Animator>();
+
+        // Health Bar Setting
+        string healthBarPrefabPath = "Prefabs/HealthBar";
+        GameObject healthBarPrefab = Resources.Load<GameObject>(healthBarPrefabPath);
+        healthBar = Instantiate(healthBarPrefab, transform).GetComponentInChildren<HealthBar>();
+
         currentHp = maxHp;
+        healthBar.SetMaxHealth(maxHp);
 
         selfRb = gameObject.GetComponent<Rigidbody>();
         selfCollder = gameObject.GetComponent<BoxCollider>();
     }
 
+    // TODO: animation
     void Update()
     {
         switch (currentState)
         {
             case EnemyState.Idle:
-                IdleStateUpdate();
+                Idle();
                 break;
             case EnemyState.Move:
-                MoveStateUpdate();
+                Move();
                 break;
             case EnemyState.Attack:
-                //AttackStateUpdate();
+                Attack();
                 break;
             case EnemyState.Hit:
-                //HitStateUpdate();
                 break;
             case EnemyState.Die:
                 break;
         }
     }
 
-    public void SetState(EnemyState state)
-    {
-        currentState = state;
-    }
-
-    private void IdleStateUpdate()
-    {
-        distance = (target.transform.position - transform.position).magnitude;
-
-        if (distance < attackDistance)
-        {
-            animator.SetTrigger("triggerAttack");
-            SetState(EnemyState.Attack);
-        } else if (distance < chaseDistance)
-        {
-            animator.SetFloat("moveSpeed", 1);
-            SetState(EnemyState.Move);
-        }
-    }
-
-    private void MoveStateUpdate()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-        transform.LookAt(target.transform.position);
-
-        float distance = (target.transform.position - transform.position).magnitude;
-
-        if (distance < attackDistance)
-        {
-            animator.SetTrigger("triggerAttack");
-            animator.SetFloat("moveSpeed", 0);
-            SetState(EnemyState.Attack);
-        } else if (distance > chaseDistance)
-        {
-            animator.SetFloat("moveSpeed", 0);
-            SetState(EnemyState.Idle);
-        }
-    }
-
-    private void AttackStateUpdate()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
-        transform.LookAt(target.transform.position);
-    }
-
-    private void HitStateUpdate()
-    {
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-
         try
         {
             if (other.gameObject.CompareTag("Member"))
             {
                 Attack(other.GetComponent<Damageable>());
-            } else if (other.transform.parent != null && other.transform.parent.CompareTag("Member"))
+            }
+            else if (other.transform.parent != null && other.transform.parent.CompareTag("Member"))
             {
                 Attack(other.GetComponentInParent<Damageable>());
             }
-        } catch
+        }
+        catch
         {
 
         }
-        
     }
 
-    public void Attack(Damageable damageable)
+    protected void SetState(EnemyState state)
     {
-        damageable.Damaged(damage);
+        currentState = state;
+    }
+
+    virtual protected void Idle()
+    {
+        distance = (target.transform.position - transform.position).magnitude;
+
+        if (distance < chaseDistance)
+        {
+            animator.SetTrigger("IdleToMove");
+            SetState(EnemyState.Move);
+        }
+    }
+    virtual protected void Move() {
+        distance = (target.transform.position - transform.position).magnitude;
+
+        if (distance < attackDistance)
+        {
+            animator.SetTrigger("MoveToAttackDelay");
+            SetState(EnemyState.Attack);
+        }
+        else if (distance > chaseDistance)
+        {
+            animator.SetTrigger("IdleToMove");
+            SetState(EnemyState.Idle);
+        } else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime);
+            transform.LookAt(target.transform.position);
+        }
+    }
+    abstract protected void Attack();
+
+    public void OnEndHit()
+    {
+        SetState(EnemyState.Idle);
     }
 
     public void Damaged(int damage)
@@ -168,30 +161,19 @@ public class Enemy : MonoBehaviour, Attackable, Damageable
         {
             SetState(EnemyState.Die);
             gameObject.tag = "Untagged";
-            animator.Play("Die", 0, 0f);
+            animator.SetTrigger("Die");
             Die();
-        } else
+        }
+        else
         {
             SetState(EnemyState.Hit);
-            animator.Play("GetHit", 0, 0f);
-            animator.SetBool("isHit", true);
+            animator.SetTrigger("Hit");
         }
-    }
-
-    public void OnEndAttack()
-    {
-        SetState(EnemyState.Idle);
-    }
-
-    public void OnEndHit()
-    {
-        animator.SetBool("isHit", false);
-        SetState(EnemyState.Idle);
     }
 
     private void Die()
     {
-        gameController.GetScore(score);
+        GameController.instance.GetScore(score);
 
         SetState(EnemyState.Die);
         selfCollder.enabled = false;
@@ -214,5 +196,15 @@ public class Enemy : MonoBehaviour, Attackable, Damageable
     public void AddDieDelegate(DieDelegate delegateFunction)
     {
         dieDelegate += delegateFunction;
+    }
+
+    public void Attack(Damageable damageable)
+    {
+        damageable.Damaged(damage);
+    }
+
+    public int GetDamage()
+    {
+        return damage;
     }
 }

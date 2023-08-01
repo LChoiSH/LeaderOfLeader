@@ -24,9 +24,10 @@ public class EnemyManager : MonoBehaviour
 
         GameObject floor = GameObject.Find("Floor");
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
-        mapBound = mapSize;
+        mapBound = mapSize - new Vector3(1, 1, 1);
 
-        SpawnEnemy(GameController.instance.gameLevel * 2);
+        SpawnEnemy(GameController.instance.gameLevel * 10);
+        //SpawnEnemy(GameController.instance.gameLevel * 2);
     }
 
     public void SpawnEnemy(int enemyNum)
@@ -34,7 +35,6 @@ public class EnemyManager : MonoBehaviour
         float randomX, randomZ;
         int randomIndex;
         Vector3 spawnPos;
-        float StartPointDistance;
         Vector3 startPoint = GameObject.Find("StartPoint").transform.position;
 
         for (int i = 0; i < enemyNum; i++)

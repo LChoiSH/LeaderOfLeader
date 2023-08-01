@@ -8,7 +8,6 @@ public class GameOverCanvas : MonoBehaviour
 {
     public static GameOverCanvas instance;
 
-
     public CanvasGroup gameOverScreen;
     public TextMeshProUGUI gameOverScoreText;
     public TextMeshProUGUI highScoreTitleText;
@@ -31,6 +30,7 @@ public class GameOverCanvas : MonoBehaviour
 
     private void Start()
     {
+        gameObject.SetActive(false);
     }
 
     public void GameOverScreenOn()

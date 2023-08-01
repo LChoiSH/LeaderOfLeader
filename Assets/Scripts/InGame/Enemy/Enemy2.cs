@@ -6,7 +6,16 @@ using TMPro;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
-abstract class Enemy1 : MonoBehaviour, Attackable, Damageable
+public enum EnemyState
+{
+    Idle,
+    Move,
+    Attack,
+    Hit,
+    Die
+}
+
+public class Enemy2 : MonoBehaviour, Attackable, Damageable
 {
     // Enemy FSM
     [SerializeField] private EnemyState currentState;
@@ -168,7 +177,6 @@ abstract class Enemy1 : MonoBehaviour, Attackable, Damageable
             animator.SetBool("isHit", true);
         }
     }
-
 
     public void OnEndAttack()
     {

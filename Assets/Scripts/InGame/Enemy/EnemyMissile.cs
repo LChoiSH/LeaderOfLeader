@@ -1,21 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-//using Unity.Notifications.Android;
 using UnityEngine;
 
-public class Missile : MonoBehaviour, Attackable
+public class EnemyMissile : MonoBehaviour
 {
-    public Member attacker;
-
+    public Enemy attacker;
     float flyingTime = 5.0f;
-
     public float speed = 10.0f;
-    [SerializeField] ParticleSystem particle;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
-    }
+    [SerializeField] ParticleSystem particle;
 
     void Start()
     {
@@ -29,23 +22,33 @@ public class Missile : MonoBehaviour, Attackable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (attacker == null) Destroy(gameObject);
+        if(attacker == null) Destroy(gameObject);
 
         if (other.CompareTag("Environment"))
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
-        if (other.gameObject.CompareTag("Enemy"))
+        try
         {
-            Attack(other.GetComponent<Damageable>());
-            gameObject.SetActive(false);
+            if (other.CompareTag("Member"))
+            {
+                Attack(other.GetComponent<Damageable>());
+            }
+            else if (other.transform.parent != null && other.transform.parent.CompareTag("Member"))
+            {
+                Attack(other.GetComponentInParent<Damageable>());
+            }
+        }
+        catch
+        {
+
         }
     }
 
     public void Attack(Damageable damageable)
     {
-        if(particle != null)
+        if (particle != null)
         {
             Instantiate(particle, transform.position, transform.rotation);
         }
@@ -64,8 +67,8 @@ public class Missile : MonoBehaviour, Attackable
         transform.gameObject.SetActive(false);
     }
 
-    public void SetAttacker(Member member)
+    public void SetAttacker(Enemy enemy)
     {
-        attacker = member;
+        attacker = enemy;
     }
 }

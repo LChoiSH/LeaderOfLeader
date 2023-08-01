@@ -97,7 +97,7 @@ public class FarmerRecoveryFruit : MonoBehaviour
             particle.Play();
         }
 
-        yield return new WaitForSeconds(particles[particles.Length - 1].duration);
+        yield return new WaitForSeconds(particles[particles.Length - 1].main.duration);
 
         Destroy(gameObject);
     }
