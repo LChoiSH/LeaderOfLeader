@@ -26,8 +26,7 @@ public class EnemyManager : MonoBehaviour
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
         mapBound = mapSize - new Vector3(1, 1, 1);
 
-        SpawnEnemy(GameController.instance.gameLevel * 10);
-        //SpawnEnemy(GameController.instance.gameLevel * 2);
+        SpawnEnemy(GameController.instance.gameLevel * 3);
     }
 
     public void SpawnEnemy(int enemyNum)
