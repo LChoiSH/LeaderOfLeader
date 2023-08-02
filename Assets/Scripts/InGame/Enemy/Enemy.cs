@@ -21,7 +21,7 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
         Die
     }
 
-    [SerializeField] EnemyState currentState;
+    [SerializeField] protected EnemyState currentState;
 
     protected Collider selfCollder;
     protected Rigidbody selfRb;
@@ -35,15 +35,15 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
     // attack
     public float attackDistance;
     public int damage;
-    [SerializeField] public GameObject target;
-    protected float attackTime;
-    protected float attackDelayTime;
+    public GameObject target;
+    [SerializeField] protected float attackTime;
+    [SerializeField] protected float attackDelayTime;
     public float attackSpeed;
 
     // damaged
     public int maxHp = 100;
-    int currentHp;
-    HealthBar healthBar;
+    protected int currentHp;
+    protected HealthBar healthBar;
 
     // die
     public int score;
@@ -72,7 +72,6 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
         selfCollder = gameObject.GetComponent<BoxCollider>();
     }
 
-    // TODO: animation
     void Update()
     {
         switch (currentState)
@@ -147,12 +146,13 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
     }
     abstract protected void Attack();
 
+
     public void OnEndHit()
     {
         SetState(EnemyState.Idle);
     }
 
-    public void Damaged(int damage)
+    virtual public void Damaged(int damage)
     {
         currentHp -= damage;
         healthBar.SetHealth(currentHp);
@@ -171,7 +171,7 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
         }
     }
 
-    private void Die()
+    virtual protected void Die()
     {
         GameController.instance.GetScore(score);
 

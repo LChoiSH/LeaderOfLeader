@@ -293,6 +293,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 5047459283179747890, guid: b104ca34e9a5d9e47a5e5ffd909c6f46, type: 3}
   - {fileID: 7033863315363831247, guid: e76f5be8c7d7b1d4b8a7573c69603b13, type: 3}
+  - {fileID: 1308380050422476116, guid: ebe118d8fdbeb0e4186d7d4ccf5a18de, type: 3}
   scoreText: {fileID: 0}
   spawnDistance: 10
 --- !u!4 &59408491
