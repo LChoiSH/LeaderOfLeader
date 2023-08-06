@@ -20,7 +20,7 @@ public class FarmerRecoveryFruit : MonoBehaviour
     bool isArrive = false;
     bool isEat = false;
 
-    int recovery = 20;
+    int recovery = 0;
 
     void Start()
     {

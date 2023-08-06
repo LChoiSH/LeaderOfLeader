@@ -95,7 +95,7 @@ public class GameController : MonoBehaviour
 
         nextLevelDoor = GameObject.Find("Next Level").GetComponent<NextLevelDoor>();
         inDoor = GameObject.Find("InDoor").GetComponent<MapDoor>();
-        outDoor = GameObject.Find("InDoor").GetComponent<MapDoor>();
+        outDoor = GameObject.Find("OutDoor").GetComponent<MapDoor>();
 
         isClear = false;
         isGameActive = false;
@@ -119,9 +119,15 @@ public class GameController : MonoBehaviour
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+        asyncOperation.allowSceneActivation = false;
+        float loadingTime = 0;
 
         while (!asyncOperation.isDone)
         {
+            loadingTime += Time.deltaTime;
+
+            if (loadingTime > 1) asyncOperation.allowSceneActivation = true;
+
             yield return null;
         }
 

@@ -42,12 +42,16 @@ public class GameStartButton : MonoBehaviour
         DataManager.instance.isLoading= true;
         startButton.interactable = false;
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+        asyncOperation.allowSceneActivation = false;
+        float loadingTime = 0;
 
         while (!asyncOperation.isDone)
         {
-            progress = Mathf.Clamp01(asyncOperation.progress / 0.9f);
-
+            progress = Mathf.Clamp(asyncOperation.progress / 0.9f, 0, 1);
             loadingProgressText.text = "Now Loading... " + (progress * 100).ToString() + "%";
+            loadingTime += Time.deltaTime;
+
+            if (loadingTime > 2) asyncOperation.allowSceneActivation = true;
 
             yield return null;
         }
@@ -67,7 +71,7 @@ public class GameStartButton : MonoBehaviour
 
         while (currentTime < fadeDuration || screenCanvasGroup.alpha < 1)
         {
-            screenCanvasGroup.alpha = currentTime / fadeDuration;
+            screenCanvasGroup.alpha = Mathf.Clamp(currentTime / fadeDuration, 0, 1);
             currentTime += Time.deltaTime;
             yield return null;
         }

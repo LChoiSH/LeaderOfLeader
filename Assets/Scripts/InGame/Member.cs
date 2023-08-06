@@ -32,7 +32,7 @@ public class Member : MonoBehaviour, Damageable
 
     // damaged
     int maxHp = 100;
-    int currentHp = 100;
+    [SerializeField] int currentHp = 100;
     bool isDamaged = false;
     float hitTime = 1.5f;
     HealthBar healthBar;
@@ -83,7 +83,10 @@ public class Member : MonoBehaviour, Damageable
         currentHp = maxHp;
         healthBar.SetMaxHealth(maxHp);
 
-        // defence Setting;
+        // damaged Setting;
+        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.useGravity = false;
         armor = 0;
         damagedAudio = gameObject.AddComponent<AudioSource>();
         damagedAudio.playOnAwake= false;

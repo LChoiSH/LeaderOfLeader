@@ -6,13 +6,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Reflection;
+using Unity.VisualScripting;
 
 public class RewardManager : MonoBehaviour
 {
-    GameController gameController;
     public GameObject rewardScreen;
     public GameObject rewardButtonPrefab;
     public Rewards rewards;
+    public LoadingCanvas loadingCanvas;
 
     private void Awake()
     {
@@ -21,8 +22,6 @@ public class RewardManager : MonoBehaviour
 
     void Start()
     {
-        gameController = GameObject.Find("Game Controller").GetComponent<GameController>();
-
         rewards = new Rewards();
     }
 
@@ -64,9 +63,10 @@ public class RewardManager : MonoBehaviour
             TextMeshProUGUI nameText = texts[0];
             TextMeshProUGUI infoText = texts[1];
 
-            button.onClick.AddListener(() => ReflectRewards(rewardInfo.name));
-            button.onClick.AddListener(() => gameController.NextStage());
             button.onClick.AddListener(() => ScreenHide());
+            button.onClick.AddListener(() => ReflectRewards(rewardInfo.name));
+            button.onClick.AddListener(() => GameController.instance.NextStage());
+            button.onClick.AddListener(() => { button.interactable = false; });
 
             nameText.text = rewardInfo.title;
             infoText.text = rewardInfo.info;
@@ -102,7 +102,7 @@ public class RewardManager : MonoBehaviour
 
     void ScreenHide()
     {
+        StartCoroutine(loadingCanvas.FadeIn());
         Time.timeScale = 1;
-        gameObject.SetActive(false);
     }
 }

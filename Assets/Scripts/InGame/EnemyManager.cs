@@ -15,7 +15,7 @@ public class EnemyManager : MonoBehaviour
     public float spawnExceptRange = 10.0f;
     public GameObject[] spawnPrefabs;
     public TextMeshProUGUI scoreText;
-    public float spawnDistance = 10.0f;
+    public float spawnDistance = 15.0f;
 
     void Start()
     {
@@ -25,8 +25,7 @@ public class EnemyManager : MonoBehaviour
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
         mapBound = mapSize - new Vector3(1, 1, 1);
 
-        //SpawnEnemy(GameController.instance.gameLevel * 3);
-        SpawnEnemy(GameController.instance.gameLevel * 30);
+        SpawnEnemy(GameController.instance.gameLevel * 3);
     }
 
     public void SpawnEnemy(int enemyNum)

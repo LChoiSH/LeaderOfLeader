@@ -221,7 +221,6 @@ MonoBehaviour:
   characterList: []
   rewardList: []
   isLoading: 0
-  currentScore: 0
 --- !u!1 &592623507
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,6 +27,7 @@ public class NextLevelDoor : MonoBehaviour
             {
                 rewardManager.gameObject.SetActive(true);
                 rewardManager.RewardScreenIn();
+                selfCollider.enabled = false;
             }
         } catch
         {

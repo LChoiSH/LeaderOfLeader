@@ -69,4 +69,11 @@ public class Beholder : Enemy
             animator.SetTrigger("Hit");
         }
     }
+
+    protected override void Die()
+    {
+        laser.gameObject.SetActive(false);
+
+        base.Die();
+    }
 }

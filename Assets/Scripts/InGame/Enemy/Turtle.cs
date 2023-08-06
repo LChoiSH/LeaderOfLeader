@@ -8,10 +8,10 @@ public class Turtle : Enemy
 
     override protected void Attack()
     {
+        transform.LookAt(target.transform.position);
+
         if (Vector3.Distance(transform.position, target.transform.position) > attackDistance)
         {
-            attackDelayTime = attackTime;
-
             SetState(EnemyState.Move);
         }
         else
@@ -29,8 +29,6 @@ public class Turtle : Enemy
 
     void Fire()
     {
-        transform.LookAt(target.transform.position);
-
         GameObject missile = Instantiate(turtleMissile);
         missile.transform.position = transform.position;
         missile.transform.LookAt(target.transform.position);

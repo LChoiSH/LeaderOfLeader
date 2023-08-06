@@ -1,14 +1,5 @@
-using JetBrains.Annotations;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.NCalc;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.SocialPlatforms.Impl;
 
 abstract public class Enemy : MonoBehaviour, Damageable, Attackable
 {
@@ -119,6 +110,8 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
 
     virtual protected void Idle()
     {
+        if (!GameController.instance.isGameActive) return;
+
         distance = (target.transform.position - transform.position).magnitude;
 
         if (distance < chaseDistance)
@@ -146,7 +139,6 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
         }
     }
     abstract protected void Attack();
-
 
     public void OnEndHit()
     {
@@ -181,8 +173,6 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
         Destroy(selfRb);
 
         dieDelegate(gameObject);
-
-        Invoke("DestroySelf", 3.0f);
 
         StartCoroutine(DestroySelf());
     }

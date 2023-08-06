@@ -20,7 +20,7 @@
       "prefab": "Farmer Man",
       "missilePrefab": "CarrotMissile",
       "skillImage": "farmer_man_skill",
-      "skillTime": 3,
+      "skillTime": 5,
       "hp": 60,
       "speed": 10,
       "attackSpeed": 60,

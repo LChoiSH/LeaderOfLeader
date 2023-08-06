@@ -63,7 +63,7 @@ public class GameOverCanvas : MonoBehaviour
 
         while (currentTime < fadeDuration || gameOverScreen.alpha < 1)
         {
-            gameOverScreen.alpha = currentTime / fadeDuration;
+            gameOverScreen.alpha = Mathf.Clamp(currentTime / fadeDuration, 0, 1);
             currentTime += Time.deltaTime;
             yield return null;
         }

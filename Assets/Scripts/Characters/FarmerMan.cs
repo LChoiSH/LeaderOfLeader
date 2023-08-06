@@ -18,7 +18,6 @@ public class FarmerMan : Leader
     protected override void Skill()
     {
         List<Member> members = MemberController.instance.GetMembers();
-        members.Add(GetComponent<Member>());
 
         foreach(Member member in members)
         {
@@ -26,7 +25,7 @@ public class FarmerMan : Leader
             fruitPosition.y += 1;
             FarmerRecoveryFruit farmerRecoveryFruit = Instantiate(fruitPrefab, fruitPosition, transform.rotation).GetComponent<FarmerRecoveryFruit>();
 
-            farmerRecoveryFruit.SetRecovery(member.gameObject, 20);
+            farmerRecoveryFruit.SetRecovery(member.gameObject, 2);
         }
     }
 }
