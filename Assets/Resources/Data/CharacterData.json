@@ -11,7 +11,8 @@
       "speed": 10,
       "attackSpeed": 100,
       "attackDamage": 80,
-      "info": "평범한 회사원입니다. 항상 이리치이고 저리치이는 그이지만 그도 양보할 수 없는게 있을겁니다."
+      "info": "평범한 회사원입니다. 항상 이리치이고 저리치이는 그이지만 그도 양보할 수 없는게 있을겁니다.",
+      "damagedSound": "business_damaged"
     },
     {
       "id": 1,
@@ -22,9 +23,10 @@
       "skillTime": 3,
       "hp": 60,
       "speed": 10,
-      "attackSpeed": 100,
+      "attackSpeed": 60,
       "attackDamage": 60,
-      "info": "순박한 농부입니다. 투쟁심은 다소 떨어지지만, 노동을 위해서 휴식과 회복이 얼마나 중요한지 알고 있습니다."
+      "info": "순박한 농부입니다. 투쟁심은 다소 떨어지지만, 노동을 위해서 휴식과 회복이 얼마나 중요한지 알고 있습니다.",
+      "damagedSound": "farmer_damaged"
     },
     {
       "id": 2,
@@ -37,7 +39,8 @@
       "speed": 10,
       "attackSpeed": 300,
       "attackDamage": 100,
-      "info": "미친 사람입니다. 그를 따라가는게 과연 옳을까요?"
+      "info": "미친 사람입니다. 그를 따라가는게 과연 옳을까요?",
+      "damagedSound": "mad_damaged"
     }
   ]
 }

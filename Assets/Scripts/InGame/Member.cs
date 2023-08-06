@@ -37,6 +37,7 @@ public class Member : MonoBehaviour, Damageable
     float hitTime = 1.5f;
     HealthBar healthBar;
     int armor;
+    AudioSource damagedAudio;
 
     // animation
     Animator animator;
@@ -84,6 +85,11 @@ public class Member : MonoBehaviour, Damageable
 
         // defence Setting;
         armor = 0;
+        damagedAudio = gameObject.AddComponent<AudioSource>();
+        damagedAudio.playOnAwake= false;
+        string audioClipPath = "Sound/" + DataManager.instance.characterDictionary[myCharacterInfo.id].damagedSound;
+        AudioClip myAudioClip = Resources.Load<AudioClip>(audioClipPath);
+        damagedAudio.clip = myAudioClip;
 
         // damage Setting
         damage = characterInfo.attackDamage;
@@ -117,9 +123,10 @@ public class Member : MonoBehaviour, Damageable
     {
         damage = Mathf.Clamp(damage - armor, 0, currentHp);
 
-
-        if (!isDamaged)
+        if (!isDamaged && currentHp > 0)
         {
+            if(damagedAudio != null) { damagedAudio.Play(); }
+
             currentHp -= damage;
             healthBar.SetHealth(currentHp);
             isDamaged = true;

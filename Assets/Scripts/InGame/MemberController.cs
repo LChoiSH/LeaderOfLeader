@@ -46,6 +46,7 @@ public class MemberController : MonoBehaviour
     public List<Member> GetMembers()
     {
         List<Member> members = GetComponentsInChildren<Member>().ToList();
+        members.Add(MovePlayer.instance.gameObject.GetComponent<Member>());
 
         return members;
     }

@@ -13,11 +13,8 @@ public abstract class Leader : MonoBehaviour
 
     protected virtual void Start()
     {
-        Debug.Log("leader start");
         CharacterInfo leaderCharacter = DataManager.instance.characterDictionary[DataManager.instance.currentCharacter];
         skillTime = leaderCharacter.skillTime;
-
-        Debug.Log(leaderCharacter.name + " " + leaderCharacter.skillTime);
     }
 
     private void Update()

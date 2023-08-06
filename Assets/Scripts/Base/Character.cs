@@ -18,4 +18,5 @@ public class CharacterInfo
     public float attackSpeed;
     public int attackDamage;
     public string info;
+    public string damagedSound;
 }

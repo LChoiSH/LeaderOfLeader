@@ -6,7 +6,6 @@ using UnityEngine;
 public class Missile : MonoBehaviour, Attackable
 {
     public Member attacker;
-
     float flyingTime = 5.0f;
 
     public float speed = 10.0f;
@@ -33,13 +32,14 @@ public class Missile : MonoBehaviour, Attackable
 
         if (other.CompareTag("Environment"))
         {
+            if (GetComponent<AudioSource>() != null) GetComponent<AudioSource>().Play();
             gameObject.SetActive(false);
         }
 
         if (other.gameObject.CompareTag("Enemy"))
         {
+            if (GetComponent<AudioSource>() != null) GetComponent<AudioSource>().Play();
             Attack(other.GetComponent<Damageable>());
-            gameObject.SetActive(false);
         }
     }
 

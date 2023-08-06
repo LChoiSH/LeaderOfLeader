@@ -4,29 +4,46 @@ using UnityEngine;
 
 public class MapDoor : MonoBehaviour
 {
+
+    public bool isOpen = false;
     float doorSpeed = 5.0f;
-    public bool isInDoor;
+    AudioSource audio;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if (!GameController.instance.isGameActive) return;
+        audio = GetComponent<AudioSource>();
 
-        if (!GameController.instance.isClear)
+    }
+
+    private void Update()
+    {
+        if (isOpen)
         {
-            if (!isInDoor) return;
-            if (transform.position.x < 0)
-            {
-                transform.Translate(Vector3.right * doorSpeed * Time.deltaTime);
-            }
-        }
-        else
-        {
-            if (isInDoor) return;
             if (transform.position.x > -7)
             {
                 transform.Translate(Vector3.left * doorSpeed * Time.deltaTime);
             }
         }
+        else
+        {
+            if (transform.position.x < 0)
+            {
+                transform.Translate(Vector3.right * doorSpeed * Time.deltaTime);
+            }
+        }
+    }
+
+    public void CloseDoor()
+    {
+        isOpen = false;
+        audio.Play();
+    }
+
+    public void OpenDoor()
+    {
+        isOpen = true;
+        audio.Play();
+
+        
     }
 }

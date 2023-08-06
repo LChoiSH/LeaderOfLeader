@@ -36,11 +36,4 @@ public class Turtle : Enemy
         missile.transform.LookAt(target.transform.position);
         missile.GetComponent<EnemyMissile>().SetAttacker(this);
     }
-
-    IEnumerator DestroySelf()
-    {
-        yield return new WaitForSeconds(3);
-
-        Destroy(turtleMissile);
-    }
 }

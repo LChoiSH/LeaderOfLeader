@@ -43,9 +43,10 @@ public class GameOverCanvas : MonoBehaviour
         {
             DataManager.instance.SetHighScore(score);
             highScoreTitleText.text = "New High Score!!!!!";
+            highScore = score;
         }
 
-        highScoreText.text = DataManager.instance.GetHighScore().ToString();
+        highScoreText.text = highScore.ToString();
 
         gameObject.SetActive(true);
         StartCoroutine(FadeIn());

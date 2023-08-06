@@ -19,7 +19,6 @@ public class RewardManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         gameController = GameObject.Find("Game Controller").GetComponent<GameController>();

@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class Rewards
 {
-    string[] rewardsList;
-
     public static void AddMember()
     {
         MemberController.instance.AddMember();

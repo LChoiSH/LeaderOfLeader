@@ -53,7 +53,8 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
     virtual protected void Start()
     {
         SetState(EnemyState.Idle);
-        target = MovePlayer.instance.gameObject;
+
+        target = (target != null ? target : MovePlayer.instance.gameObject);
 
         attackTime = 100 / attackSpeed;
         attackDelayTime = attackTime;

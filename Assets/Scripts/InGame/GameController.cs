@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
     public bool isGameActive = true;
     public bool isClear = false;
     public bool isReward = false;
+    public MapDoor inDoor;
+    public MapDoor outDoor;
 
     // Game Over Screen
     public GameOverCanvas gameOverCanvas;
@@ -92,6 +94,8 @@ public class GameController : MonoBehaviour
         }
 
         nextLevelDoor = GameObject.Find("Next Level").GetComponent<NextLevelDoor>();
+        inDoor = GameObject.Find("InDoor").GetComponent<MapDoor>();
+        outDoor = GameObject.Find("InDoor").GetComponent<MapDoor>();
 
         isClear = false;
         isGameActive = false;
@@ -104,6 +108,7 @@ public class GameController : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         isGameActive = true;
+        inDoor.CloseDoor();
     }
 
     public void NextStage()
@@ -147,6 +152,7 @@ public class GameController : MonoBehaviour
     public void StageClear()
     {
         isClear = true;
+        outDoor.OpenDoor();
         nextLevelDoor.LightOn();
         gameLevel++;
     }

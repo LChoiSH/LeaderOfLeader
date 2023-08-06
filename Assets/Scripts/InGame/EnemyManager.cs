@@ -17,7 +17,6 @@ public class EnemyManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public float spawnDistance = 10.0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         enemies = new HashSet<GameObject>();
@@ -26,7 +25,8 @@ public class EnemyManager : MonoBehaviour
         Vector3 mapSize = floor.GetComponent<MeshRenderer>().bounds.size;
         mapBound = mapSize - new Vector3(1, 1, 1);
 
-        SpawnEnemy(GameController.instance.gameLevel * 3);
+        //SpawnEnemy(GameController.instance.gameLevel * 3);
+        SpawnEnemy(GameController.instance.gameLevel * 30);
     }
 
     public void SpawnEnemy(int enemyNum)
