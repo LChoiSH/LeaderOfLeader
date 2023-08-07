@@ -105,6 +105,8 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
 
     protected void SetState(EnemyState state)
     {
+        if (currentState == EnemyState.Die) return;
+
         currentState = state;
     }
 
@@ -152,9 +154,9 @@ abstract public class Enemy : MonoBehaviour, Damageable, Attackable
 
         if (currentHp <= 0)
         {
-            SetState(EnemyState.Die);
             gameObject.tag = "Untagged";
             animator.SetTrigger("Die");
+            SetState(EnemyState.Die);
             Die();
         }
         else

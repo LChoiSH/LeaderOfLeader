@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attacker: {fileID: 0}
   speed: 10
-  particle: {fileID: 19811986, guid: 6636b3078b0905e489f698a11b7a6b6b, type: 3}
+  particle: {fileID: 19811986, guid: 220637560af027f4aa1403803dd97a5b, type: 3}
 --- !u!65 &6713180609352195785
 BoxCollider:
   m_ObjectHideFlags: 0

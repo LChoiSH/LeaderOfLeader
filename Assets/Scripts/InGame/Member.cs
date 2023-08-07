@@ -90,7 +90,7 @@ public class Member : MonoBehaviour, Damageable
         armor = 0;
         damagedAudio = gameObject.AddComponent<AudioSource>();
         damagedAudio.playOnAwake= false;
-        string audioClipPath = "Sound/" + DataManager.instance.characterDictionary[myCharacterInfo.id].damagedSound;
+        string audioClipPath = "Audio/" + DataManager.instance.characterDictionary[myCharacterInfo.id].damagedSound;
         AudioClip myAudioClip = Resources.Load<AudioClip>(audioClipPath);
         damagedAudio.clip = myAudioClip;
 
@@ -124,6 +124,8 @@ public class Member : MonoBehaviour, Damageable
 
     public virtual void Damaged(int damage)
     {
+        if (!GameController.instance.isGameActive) return;
+
         damage = Mathf.Clamp(damage - armor, 0, currentHp);
 
         if (!isDamaged && currentHp > 0)

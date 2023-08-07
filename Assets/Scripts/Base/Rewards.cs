@@ -38,7 +38,7 @@ public class Rewards
 
         foreach (Member member in members)
         {
-            member.ArmorUp(10);
+            member.ArmorUp(2);
         }
     }
 

@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class SelectCharacterButton : MonoBehaviour
 {
     Button sceneChangeButton;
+    public LoadingCanvas loadingCanvas;
 
-    // Start is called before the first frame update
     void Start()
     {
         sceneChangeButton = GetComponent<Button>();
@@ -17,7 +17,26 @@ public class SelectCharacterButton : MonoBehaviour
 
     private void GoToCharacterSelectScene()
     {
+        StartCoroutine(loadingCanvas.FadeIn());
+
         GameController.instance.GameSettingReset();
-        SceneManager.LoadScene("CharacterSelect");
+
+        StartCoroutine(LoadSceneAsync("CharacterSelect"));
+    }
+
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName);
+        asyncOperation.allowSceneActivation = false;
+        float loadingTime = 0;
+
+        while (!asyncOperation.isDone)
+        {
+            loadingTime += Time.deltaTime;
+
+            if (loadingTime > 1) asyncOperation.allowSceneActivation = true;
+
+            yield return null;
+        }
     }
 }

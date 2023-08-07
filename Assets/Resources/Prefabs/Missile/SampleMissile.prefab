@@ -111,10 +111,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e0dff2325d11d843adb106a3b121213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attacker: {fileID: 0}
   speed: 10
-  particle: {fileID: 2115948838484499290, guid: 76ab08328f4a86549a336e78c828fb4d,
-    type: 3}
-  damage: 100
+  particle: {fileID: 19814690, guid: 0343fabc81228294d8a17b947d78611c, type: 3}
 --- !u!54 &-2846151685447067557
 Rigidbody:
   m_ObjectHideFlags: 0

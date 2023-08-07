@@ -6,6 +6,7 @@ using UnityEngine;
 public class FarmerMan : Leader
 {
     GameObject fruitPrefab;
+    public AudioSource skillAudio;
 
     protected override void Start()
     {
@@ -13,11 +14,20 @@ public class FarmerMan : Leader
 
         string fruitPath = "Prefabs/etc/Farmer_Fruit";
         fruitPrefab = Resources.Load<GameObject>(fruitPath);
+
+        skillAudio = gameObject.AddComponent<AudioSource>();
+        skillAudio.playOnAwake = false;
+
+        string skillSoundPath = "Audio/sound_farmer_skill";
+        AudioClip skillAudioClip = Resources.Load<AudioClip>(skillSoundPath);
+        skillAudio.clip = skillAudioClip;
     }
 
     protected override void Skill()
     {
         List<Member> members = MemberController.instance.GetMembers();
+
+        skillAudio.Play();
 
         foreach(Member member in members)
         {

@@ -8,27 +8,31 @@ public class MapDoor : MonoBehaviour
     public bool isOpen = false;
     float doorSpeed = 5.0f;
     AudioSource audio;
+    Vector3 position;
 
     private void Start()
     {
         audio = GetComponent<AudioSource>();
 
+        position = transform.position;
     }
 
     private void Update()
     {
         if (isOpen)
         {
-            if (transform.position.x > -7)
+            if (transform.position.x > -6)
             {
-                transform.Translate(Vector3.left * doorSpeed * Time.deltaTime);
+                position.x = Mathf.Clamp(transform.position.x - doorSpeed * Time.deltaTime, -6, 0);
+                transform.position = position;
             }
         }
         else
         {
             if (transform.position.x < 0)
             {
-                transform.Translate(Vector3.right * doorSpeed * Time.deltaTime);
+                position.x = Mathf.Clamp(transform.position.x + doorSpeed * Time.deltaTime, -6, 0);
+                transform.position = position;
             }
         }
     }
