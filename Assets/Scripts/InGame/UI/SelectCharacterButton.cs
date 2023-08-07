@@ -17,6 +17,7 @@ public class SelectCharacterButton : MonoBehaviour
 
     private void GoToCharacterSelectScene()
     {
+        loadingCanvas = GameObject.Find("Loading Canvas").GetComponent<LoadingCanvas>();
         StartCoroutine(loadingCanvas.FadeIn());
 
         GameController.instance.GameSettingReset();

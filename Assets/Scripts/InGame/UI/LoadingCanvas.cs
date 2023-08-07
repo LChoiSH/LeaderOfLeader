@@ -26,8 +26,6 @@ public class LoadingCanvas : MonoBehaviour
             currentTime -= Time.deltaTime;
             yield return null;
         }
-
-        gameObject.SetActive(false);
     }
 
     public IEnumerator FadeIn()
@@ -35,7 +33,6 @@ public class LoadingCanvas : MonoBehaviour
         float fadeDuration = 1.0f;
 
         loadingScreen.alpha = 0;
-        gameObject.SetActive(true);
 
         float currentTime = 0;
 
