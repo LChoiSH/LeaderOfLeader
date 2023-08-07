@@ -23,13 +23,6 @@ public class MemberController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Tab)) {
-            AddMember();
-        }
-    }
-
     public void AddMember()
     {
         Member[] members = GetComponentsInChildren<Member>();

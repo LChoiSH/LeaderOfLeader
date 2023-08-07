@@ -165,11 +165,11 @@ public class GameController : MonoBehaviour
 
     public void GameSettingReset()
     {
-        Destroy(player);
-        Destroy(MainCamera.instance.gameObject);
-        Destroy(MemberController.instance.gameObject);
-        Destroy(GameOverCanvas.instance.gameObject);
-        Destroy(GameCanvas.instance.gameObject);
-        Destroy(gameObject);
+        SceneManager.MoveGameObjectToScene(player, SceneManager.GetActiveScene());
+        SceneManager.MoveGameObjectToScene(MainCamera.instance.gameObject, SceneManager.GetActiveScene());
+        SceneManager.MoveGameObjectToScene(MemberController.instance.gameObject, SceneManager.GetActiveScene());
+        SceneManager.MoveGameObjectToScene(GameOverCanvas.instance.gameObject, SceneManager.GetActiveScene());
+        SceneManager.MoveGameObjectToScene(GameCanvas.instance.gameObject, SceneManager.GetActiveScene());
+        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetActiveScene());
     }
 }
