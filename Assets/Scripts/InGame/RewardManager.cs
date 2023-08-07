@@ -35,7 +35,7 @@ public class RewardManager : MonoBehaviour
 
         for(int i = 0;i < 3;i++)
         {
-            int randomRewardNum = UnityEngine.Random.Range(i, DataManager.instance.rewardList.Length);
+            int randomRewardNum = UnityEngine.Random.Range(0, DataManager.instance.rewardList.Length);
             if (!madeRewards.Add(randomRewardNum))
             {
                 i--;

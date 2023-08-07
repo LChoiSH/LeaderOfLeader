@@ -124,8 +124,6 @@ public class Member : MonoBehaviour, Damageable
 
     public virtual void Damaged(int damage)
     {
-        if (!GameController.instance.isGameActive) return;
-
         damage = Mathf.Clamp(damage - armor, 0, currentHp);
 
         if (!isDamaged && currentHp > 0)
@@ -163,14 +161,19 @@ public class Member : MonoBehaviour, Damageable
     protected virtual void Move()
     {
         if (followingTarget == null) return;
-        if (currentHp <= 0) return;
         
         StartCoroutine(FollowTarget());
     }
 
     IEnumerator FollowTarget()
     {
-        if(followingTarget.currentHp <= 0)
+        if (currentHp <= 0)
+        {
+            yield break;
+        }
+
+
+        if (followingTarget.GetCurrentHp() <= 0)
         {
             Damaged(999999);
             yield break;
