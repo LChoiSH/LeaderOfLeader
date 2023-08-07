@@ -54,11 +54,6 @@ public class Member : MonoBehaviour, Damageable
 
     private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            Damaged(9999);
-        }
-
         if (isLoading) return;
         Move();
     }
